@@ -140,7 +140,10 @@ Mustache 语法不能作用在 HTML 特性上，遇到这种情况应该使用 v
 <a V-bind:href='url'>链接</a> href 是参数
 <a v-on:click='doSome'></a> click 是参数
 
-
+1. 事件处理函数中的this是什么？  this指的就是当前的vue实例，我们可以通过this快速访问到数据！  this.msg
+2. 事件对象如何获取
+    2.1. v-on:事件名称.修饰符="函数名"  直接通过形参e接收即可
+    2.2. v-on:事件名称.修饰符="函数名()" 需要在注册事件的时候手动的传入$event，用形参e来接收
 
 动态参数 可以用方括号[]括起来的JavaScript表达式作为一个指令或者事件名来作为参数
 <input @[type?change:focus]="event">
@@ -150,20 +153,11 @@ Mustache 语法不能作用在 HTML 特性上，遇到这种情况应该使用 v
 .prevent就代表event.preventDefault()，阻止默认行为 （该修饰符告诉v-on指令 对于触发的事件(在触发后)调用 event.preventDefault()）
 
 缩写 v-bind: === : v-on: === @
-
 ```
 
+## vue实例为什么可以访问到数据
+vm.数据名 this.数据名
 
-
-## vue结合UI框架的使用
-
-vue.js的使用？vue.js的开发环境我使用的是webstrom。vue的环境搭建首先要安装node，借助node里面的npm来安装需要的依赖等等，网上教程很多而且按照步骤安装就可以了，就不说了。相信你在安装的时候肯定遇到了npm  install  vue-cli  -g命令。那这到底是什么意思呢？Vue-cli是什么？它是一个vue.js的脚手架工具。就是一个自动帮你生成好项目目录，配置好Webpack，以及各种依赖包的工具。 -g是全局安装，这就表示打开命令行之后可以直接通过vue命令调用它。项目搭建项目目录结构的作用？build  目录是一些webpack的文件，配置一些参数，一般不动。config  是vue项目的基本配置文件node_modules  是项目中安装的依赖模块src 源码文件夹，基本上文件都应该放在这里     ------assets  资源文件夹，里面放一些静态资源     -------components  这里放的都是各个组件文件     --------App.vue   App.vue组件---------main.js入口文件static  生成好的文件都会放在这个目录下(css、js等)test   测试文件夹，测试都写在这里.babelrc   babelrc编译参数,vue开发需要babel编译.editorconfig  编辑器配置文件.gitignore   用来过滤一些版本控制的文件，比如node_modules 文件夹index.html 主页package.json 项目文件，记载着一些命令和依赖还有简要的项目描述信息README.md   项目说明(介绍自己这个项目的)
-
-## 几个重要文件
-其中要重点说一下一下几个文件：
-1.package.json文件。dependencies：项目发布时的依赖devDependencies：项目开发时的依赖scripts：编译项目的一些命令
-2.main.js这里是入口文件，可以引入一些插件或静态资源，当然引入之前要先安装了该插件，在package.json文件中有记录。importVuefrom'vue'importAppfrom'./App'importrouterfrom'./router'//引入路由设置importaxiosfrom'axios'importElementUIfrom'element-ui'import'element-ui/lib/theme-chalk/index.css'import"babel-polyfill"//引入echartsimportechartsfrom'echarts'
-3.App.vue这是一个标准的vue组件，包含三个部分，一个是模板，一个是script，一个是样式importHellofrom'./components/Hello'exportdefault{name:'app',components: {    Hello  }}@import"../static/css/main.css";@import"../static/css/color-dark.css";/*深色主题*//*@import "../static/css/theme-green/color-green.css";   浅绿色主题*/
-
+在创建vue实例的时候 会将参数对象data内所有的属性 通过Object.defineProperty方法添加到vue实例中 最终视图中绑定的数据使用的也是vue实例中的数据
 
 
