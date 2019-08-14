@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue-start</title>
+</head>
+<body>
+
+    <div id="app">
+        {{message}}
+        <h1 v-html="htmlvalue"></h1>
+        <h2 :title="message">鼠标悬停</h2>
+        <button v-bind:disabled="isButtonDisabled">按钮</button>
+        <!-- <input type="text" v-bind:[eventName]='event'>
+        <button v-bind:click='eventName="change"'>change事件</button>
+        <button v-bind:click='eventName="focus"'>focus事件</button>
+        <button v-bind:click='eventName=1'>1</button> -->
+        <!-- <input @[eventName]="event" /> -->
+        <input @[type?change:focus]="event($event)" />
+        <button @click="eventName='change'">change</button>
+        <button @click="eventName='focus'">focus</button>
+        <button @click="eventName=1">1</button>
+    </div>
+
+    <!-- 生产环境版本，优化了尺寸和速度 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script>
+        // 创建vue实例 命名vm 是为了纪念 viewmodel
+        var vm = new Vue({
+            // el就是用来指定，Vue所要管理的元素范围！
+            el: "#app",
+            // data就是用来提供数据的对象！
+            data: {
+                message: 'Hello Vue!',
+                htmlvalue: '<span style="color:red;">the should be red</span>', // 比如：这是一个富文本的值
+                isButtonDisabled: true,
+                attrName: 'href',
+                // url: 'www.baidu.com',
+                eventName: '',
+                type: null,
+                change: 'change',
+                focus: 'focus'
+            },
+            methods: {
+                // event() {
+                //     console.log('触发的事件名称'+this.eventName);
+                // },
+                event(e) {
+                    console.log('触发' + this.eventName + '事件',e + '事件对象')
+                }
+            }
+        })
+    
+    </script>
+</body>
+</html>
