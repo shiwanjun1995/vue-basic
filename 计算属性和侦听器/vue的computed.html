@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>computed</title>
+</head>
+<body>
+    <div id="app">
+        <p style="color:red;">{{msg}}</p>
+        <h2>{{info}}</h2>
+        <h1>{{newinfo()}}</h1>
+        <h3>data属性中的数据：{{num}}</h3>
+        <h3>computed属性中的数据：{{getNum}}</h3>
+        <!-- <button v-on:click="changeNum">改变num的值</button> -->
+        <button @click="changeNum">改变num的值</button>
+        <button onclick="fn()">测试每隔一秒执行一次</button>
+    </div>
+    <!-- 生产环境版本，优化了尺寸和速度 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',// 指定vue管理的元素边界
+            data: { // 用来提供数据对象
+                msg: '欢迎你来到石老师的vue世界！',
+                info: '696969',
+                num: 8,
+            },
+
+            computed: { 
+                // 计算属性的getter 对象的属性 被取值的时候被自动调用
+                // split() 字符串变成数组  如果把空字符串 ("") 用作 separator，那么 stringObject 中的每个字符之间都会被分割。
+                // join() 数组变成字符串 可选。指定要使用的分隔符。如果省略该参数，则使用逗号作为分隔符。
+                // newinfo:function () { 
+                //     return this.info.split('').reverse().join('')
+                // },
+
+                // getNum 计算属性值是依赖于num 由于计算属性会自动检测数据的变化 所以当num的值改变了 那么计算属性也会发生改变
+                getNum() {
+                    console.log('计算属性的时间'+new Date());
+                    return this.num - 1;
+                },
+                
+            },
+
+            methods: {
+                newinfo: function () { 
+                    return this.info.split('').reverse().join('')
+                },
+                // 一个是计算属性 一个是普通的方法 两个实现的功能完全一样 都是输出当前的系统时间 和返回 num -1 
+                getNum2() {
+                    console.log('methods的时间'+new Date());
+                    return this.num - 1;
+                },
+                changeNum() {
+                    this.num = this.num + 5; // 
+                },
+            },
+        })
+
+        setInterval(() => {
+            // 把字符串最前面的一个字符截取 并放到最后面即可 slice(start,end) [start,end) 截取数组
+            vm.msg = vm.msg.slice(1) + vm.msg.slice(0,1)
+        }, 500);
+      
+        function fn() { 
+            setInterval(() => {
+                console.log('计算属性：'+ vm.getNum);
+                console.log('普通方法：' + vm.getNum2());
+            }, 1000);
+         }
+    
+    </script>
+</body>
+</html>
