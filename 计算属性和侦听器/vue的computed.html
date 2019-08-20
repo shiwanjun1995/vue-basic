@@ -9,6 +9,8 @@
 <body>
     <div id="app">
         <p style="color:red;">{{msg}}</p>
+        <p style="color:green;">{{reverseMsg + 'computed'}}</p>
+        <p style="color: chartreuse">{{reverseMsg1() + 'methods'}}</p>
         <h2>{{info}}</h2>
         <h1>{{newinfo()}}</h1>
         <h3>data属性中的数据：{{num}}</h3>
@@ -38,8 +40,12 @@
 
                 // getNum 计算属性值是依赖于num 由于计算属性会自动检测数据的变化 所以当num的值改变了 那么计算属性也会发生改变
                 getNum() {
-                    console.log('计算属性的时间'+new Date());
+                    console.log('计算属性的时间'+new Date());// 就执行了一次 
                     return this.num - 1;
+                },
+
+                reverseMsg() {
+                    return Math.random() + this.info.split('').reverse().join('')
                 },
                 
             },
@@ -50,11 +56,16 @@
                 },
                 // 一个是计算属性 一个是普通的方法 两个实现的功能完全一样 都是输出当前的系统时间 和返回 num -1 
                 getNum2() {
-                    console.log('methods的时间'+new Date());
+                    console.log('methods的时间'+new Date());// 每次都会执行
                     return this.num - 1;
                 },
                 changeNum() {
-                    this.num = this.num + 5; // 
+                    this.num = this.num + 5; // 1.当改变num的值后 计算属性这个时候重新求值了 
+                                             // 2.               普通方法每次都会执行   
+                },
+                reverseMsg1() {
+                    console.log('msg更改了');
+                    return Math.random() + this.info.split('').reverse().join('');
                 },
             },
         })
