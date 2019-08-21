@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>computed的使用</title>
+    <script src="https://cdn.bootcss.com/vue/2.5.16/vue.js"></script>
+</head>
+
+<body>
+    <div id="root">
+    </div>
+    <script>
+        var vm = new Vue({
+            el: "#root",
+            data: {
+                name: "石头",
+                age: 13,
+                hobby: '大猪',
+                nameAgeStyle: {
+                    fontSize: "20px",
+                    color: "#0c8ac5"
+                }
+            },
+            template: `<div>
+            <div v-bind:style="nameAgeStyle">computed方式渲染: {{nameAndAge}}</div>
+            <div v-bind:style="nameAgeStyle">methods 方式渲染: {{getNameAndAge()}}</div>
+            <br>
+            <input type="text" v-model="hobby">
+            <div>爱好: {{hobby}}</div>
+            <div>{{noUse()}}</div>
+            </div>`,
+            computed: {
+                nameAndAge: {
+                    get() {
+                        console.log('调用computed');
+                        return `${this.name} ==> ${this.age}`;
+                    }
+                }
+            },
+            methods: {
+                getNameAndAge() {
+                    console.log('调用methods');
+                    return `${this.name} ==> ${this.age}`;
+                },
+                noUse() {
+                    console.log("=methods==nouse==");
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

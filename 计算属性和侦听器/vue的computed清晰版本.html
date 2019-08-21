@@ -64,7 +64,7 @@
                                              // 2.               普通方法每次都会执行   
                 },
                 reverseMsg1() {
-                    console.log('msg更改了');
+                    console.log('info更改了 实质是info并没有更改 而是msg更改了 但还是触发了这个与自己无关的属性的方法');
                     return Math.random() + this.info.split('').reverse().join('');
                 },
             },
