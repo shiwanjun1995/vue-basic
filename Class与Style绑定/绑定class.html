@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>绑定class与style</title>
+    <style>
+        .active {
+            color: #0f0;
+        }
+        .text-danger {
+            background-color: #f40;
+        }
+    
+    </style>
+</head>
+<body>
+    <div id="app">
+        {{msg}}
+        <p v-bind:class="{ active : isActive , 'text-danger': hasError}">动态添加class 样式类名取决于isActive的布尔值</p>
+        <P :class="clsObj">绑定一个返回对象的计算属性 这是一个powerful的模式</P>
+
+        <p v-bind:style="{ color: activeColor, 'font-size': fontSize + 'px', backgroundColor: bgColor }">绑定的内联样式</p>
+        <p :style="styleObj">直接绑定到一个样式对象通常更好，这会让模板更清晰</p>
+        <p :style="[baseStyles, overridingStyles]">数组语法 融合多个样式对象</p>
+    </div>
+
+  <!-- 生产环境版本，优化了尺寸和速度 -->
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script>
+      const vm = new Vue({
+          el: "#app",
+          data: {
+            msg: '石老师的动态添加class',
+            isActive: true,
+            hasError: true,
+            error: null,
+            activeColor: 'pink',
+            fontSize: 40,
+            bgColor: 'yellow',
+          },
+          computed: {
+
+            clsObj() {
+                return {
+                    active: this.isActive && !this.error,
+                    'text-danger': this.error && this.error.type === 'fatal'
+                }
+            },
+
+            styleObj() {
+                return {
+                    color: this.isActive === true ? 'red' : 'yellow',
+                }
+            },
+
+            baseStyles() {
+                return {
+                    color: 'blue',
+                   'font-size': '20px',
+                }
+            },
+
+            overridingStyles() {
+                return {
+                    // color: 'brown !important',
+                    // fontSize: `45px`,
+                    backgroundColor: 'pink',
+                }
+            },
+
+          },
+          methods: {
+
+          }
+      })
+  
+  
+  </script>
+</body>
+</html>
