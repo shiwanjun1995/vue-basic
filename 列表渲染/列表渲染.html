@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>列表渲染</title>
+    <style>
+    button {
+        /* height: 20px;
+        border: none;
+        border-radius: 10px;
+        color: #fff;
+        background-image: linear-gradient(46deg, #FB803A 0%, #F1961B 100%);
+        box-shadow: -0.02px 0.1rem 0.2rem rgba(241, 150, 27, 0.23); */
+    }
+    
+    </style>
+</head>
+<body>
+    <div id="app">
+
+       <div>
+            品牌名称: <input type="text" v-model="brandName"><button @click="add">添加</button>
+            请输入关键字:<input type="text" v-model="keywords">
+       </div>
+       <table border=1 >
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>品牌名称</th>
+                <th>添加时间</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="(item, index) in search()" :key="index">
+                <td>{{index}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.ctime}}</td>
+                <td><button @click="delet(item)">删除</button></td>
+            </tr>
+        </tbody>
+       </table>
+        
+    </div>
+
+  <!-- 生产环境版本，优化了尺寸和速度 -->
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script>
+      const vm = new Vue({
+          el: "#app",
+          data: {
+            msg: '石老师的列表渲染增删改查',
+            brandName: "", /*数据双向绑定*/
+            keywords: "",
+            brandList: [
+                {id: 0, name: "BMW", ctime: new Date()},
+                {id: 12, name: "Benz", ctime: new Date()},
+                {id: 7, name: "Audi", ctime: new Date()},
+                {id: 39, name: "Lexus", ctime: new Date()},
+                {id: 54, name: "LandRover", ctime: new Date()},
+                {id: 43, name: "Dongfeng Peugeot", ctime: new Date()},
+            ]
+          },
+          computed: {},
+          methods: {
+            // 增
+            add() {
+                if (this.brandName === '') {
+                    console.log('输入内容不能为空！')
+                    return 
+                }
+                // 注册添加事件==>获取用户输入的内容==>将内容添加到数组中
+                this.brandList.push({
+                    id: this.brandList.length == 0? 1: this.brandList[this.brandList.length -1].id + 1,
+                    name: this.brandName,
+                    ctime: new Date(),
+                })
+                // 清空文本框内容
+                this.brandName = ''
+            },
+            // 搜
+            search() {
+                // 获取关键字==>通过关键字在数组中查找和关键字匹配的内容==>使用过滤函数
+                // indexOf 返回指定元素的索引值  如果没有的话就返回-1 搜索数组中的元素，并返回它所在的位置
+                // filter 方法相当于在循环的时候数组遍历一个个对象，并问你这个是不是你要找的值，如果你说是，他就会给你返回一个到新的数组中，不是他就会剔除
+
+                // 原理：当数据发生变化的时候 页面中所有的vue指令都会被重新执行以获取新的结果
+                //      遍历的时候 不遍历原数组 遍历search函数调用返回的结果
+                //      search函数中根据当前用户输入的内容在原数组中去查找所有包含关键字的项 并作为该函数的返回值返回
+                var result = this.brandList.filter((value) => {
+                    return value.name.indexOf(this.keywords) != -1;
+                })
+
+                // 'BMW'.indexOf('')  0
+                // 'BMW'.indexOf('B') 0
+                // 'BMW'.indexOf('M') 1
+                // 'BMW'.indexOf('W') 2
+                // 'BMW'.indexOf('A') -1
+
+                console.log(result);
+                return result
+            },
+            // 删 注意delete是关键字
+            delet(item) {
+                // 获取当前需要删除项的id==>根据id去找数组中对应的id的那一项
+
+                // find()函数用来查找目标元素，找到就返回该元素，找不到返回undefined。
+                // findIndex()函数也是查找目标元素，找到就返回元素的位置，找不到就返回-1。
+                // var result = this.brandList.find((value,index,arr) => {
+                //     return value.id === item.id
+                // })
+                // console.log(result);
+
+                // 根据删除项找到该项在数组中对应的索引
+                
+                
+            }
+
+        },
+      })
+  
+  
+  </script>
+</body>
+</html>
