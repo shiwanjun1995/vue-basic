@@ -7,12 +7,12 @@
     <title>列表渲染</title>
     <style>
     button {
-        /* height: 20px;
+        height: 20px;
         border: none;
         border-radius: 10px;
         color: #fff;
         background-image: linear-gradient(46deg, #FB803A 0%, #F1961B 100%);
-        box-shadow: -0.02px 0.1rem 0.2rem rgba(241, 150, 27, 0.23); */
+        box-shadow: -0.02px 0.1rem 0.2rem rgba(241, 150, 27, 0.23);
     }
     
     </style>
@@ -43,6 +43,16 @@
         </tbody>
        </table>
         
+       <!-- <h3 id="box">{{msg}}</h3> -->
+       <h3 ref="box">{{msg}}</h3>
+       <h2 v-if="msg1">Message got outside $nextTick: {{msg1}}</h2>
+       <h2 v-if="msg2">Message got inside $nextTick: {{msg2}}</h2>
+       <h2 v-if="msg3">Message got outside $nextTick: {{msg3}}</h2>
+       <button @click="change">改变msg的值</button>
+
+       <p>{{person.name}}今年{{person.age}}岁，他的性别是{{person.gender}}，他喜欢的颜色是{{person.favoriteColor}}</p>
+
+        <button @click="btnClick">给罡总加个性别</button>
     </div>
 
   <!-- 生产环境版本，优化了尺寸和速度 -->
@@ -52,8 +62,15 @@
           el: "#app",
           data: {
             msg: '石老师的列表渲染增删改查',
+            msg1: '',
+            msg2: '',
+            msg3: '',
             brandName: "", /*数据双向绑定*/
             keywords: "",
+            person: {
+                name: "罡总",
+                age: 18,
+            },
             brandList: [
                 {id: 0, name: "BMW", ctime: new Date()},
                 {id: 12, name: "Benz", ctime: new Date()},
@@ -123,9 +140,47 @@
                 this.brandList.splice(index,1);
             },
 
+            change() {
+                this.msg = "这是新的msg的数据";
+                // console.log(document.querySelector('#box').innerHTML);
+
+                // 将数据修改之后，DOM并没有即时更新，而是等到vue下一次的渲染工作执行的时候，才会更新DOM
+                console.log(this.$refs.box.innerHTML);
+                this.msg1 = this.$refs.box.innerHTML;
+                this.$nextTick(() => {
+                     // 当dom更新完成之后，vue会自动调用这个函数中的内容
+                     // 能够确保在这个函数中，访问到的DOM对象肯定是最新的！
+                    this.msg2 = this.$refs.box.innerHTML;
+                })
+                this.msg3 = this.$refs.box.innerHTML;
+            },
+
+            btnClick() {
+                // 如果要给数据中的对象，动态添加属性，不能直接用点语法来添加
+                // 因为这么做，视图不能够及时更新！
+                // this.person.gender = '男';
+
+                // 为了解决上述问题 可以用Vue.set()
+                // Vue.set(this.person,'gender','女');
+
+                // 或者使用实例的方法
+                // vm.$set(this.person,'gender','男');
+
+                // 为已有对象设置多个新属性
+                // 如果你想添加新的响应式属性，应该这样做：
+               
+                vm.person = Object.assign({}, vm.person, {
+                    'gender': '男',
+                    'favoriteColor': 'GAY GREEN!'
+                })
+
+            },
+
         },
       })
   
+
+
   
   </script>
 </body>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>列表渲染</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        li {
+            width: 100%;
+            height: 20px;
+            line-height: 20px;
+            text-align: center;
+            border: 1px solid #0f0;
+            box-sizing: border-box; /*怪异盒模型*/
+        }
+        button {
+            height: 20px;
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            background-image: linear-gradient(46deg, #FB803A 0%, #F1961B 100%);
+            box-shadow: -0.02px 0.1rem 0.2rem rgba(241, 150, 27, 0.23);
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- <ul>
+            <li v-for="num in evenList">{{ num }}</li>
+        </ul> -->
+        <!-- <ul>
+            <li v-for="num in even()">{{ num }}</li>
+        </ul> -->
+        <ul>
+            <li v-for="num in even(numbers)">{{ num }}</li>
+        </ul>
+    </div>
+
+  <!-- 生产环境版本，优化了尺寸和速度 -->
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script>
+      const vm = new Vue({
+          el: "#app",
+          data: {
+            msg: '石老师的列表渲染增删改查',
+            numbers: [1,2,3,4,5,6,7,8,9,10],
+          },
+          computed: {
+            evenList() {
+                // return this.numbers.filter(v => {
+                //     return v % 2 === 0
+                // })
+
+                // 当{}花括号内 只有一个表达式 并且有return语句的时候 二者都可以省略
+                // 即:
+                return this.numbers.filter(v => v % 2 === 0)
+            }
+          },
+          methods: {
+            even(numbers) {
+                // return this.numbers.filter(v => v % 2 === 0)
+                return numbers.filter(v => {
+                    return v % 2 === 0
+                })
+            }
+          },
+
+      })
+  
+
+
+  
+  </script>
+</body>
+</html>
