@@ -114,9 +114,14 @@
                 // console.log(result);
 
                 // 根据删除项找到该项在数组中对应的索引
+                const index = this.brandList.findIndex(v => {
+                    return v.id === item.id
+                })
+                console.log(index);
                 
-                
-            }
+                // 根据索引值去数组内删除这一项
+                this.brandList.splice(index,1);
+            },
 
         },
       })
