@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>表单输入绑定</title>
+    <style>
+        button {
+            height: 20px;
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            background-image: linear-gradient(46deg, #FB803A 0%, #F1961B 100%);
+            box-shadow: -0.02px 0.1rem 0.2rem rgba(241, 150, 27, 0.23);
+        }
+        
+    </style>
+</head>
+<body>
+    <div id="app">
+        <input type="text" placeholder="输入内容" v-model="msg">
+        <p>上面输入的值是{{msg}}</p>
+        <span>多行信息:</span>
+        <p style="white-space: pre-line;">{{ moreline }}</p><br>
+        <textarea v-model="moreline" placeholder="add multiple lines"></textarea><br>
+
+        <!-- 在“change”时而非“input”时更新 -->
+        <!-- <input v-model="lazyMsg" placeholder="input的时候不会更新"> -->
+        <input v-model.lazy="lazyMsg" placeholder="input的时候不会更新">
+        <p>{{lazyMsg}}</p>
+    </div>
+
+  <!-- 生产环境版本，优化了尺寸和速度 -->
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script>
+      const vm = new Vue({
+          el: "#app",
+          data: {
+            msg: '石老师的表单输入绑定',
+            moreline: '',
+            lazyMsg: '',
+           
+          },
+          computed: {
+          },
+          methods: {
+            
+          },
+      })
+  
+  
+  </script>
+</body>
+</html>
