@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>事件处理</title>
+    <style>
+        button {
+            height: 20px;
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            background-image: linear-gradient(46deg, #FB803A 0%, #F1961B 100%);
+            box-shadow: -0.02px 0.1rem 0.2rem rgba(241, 150, 27, 0.23);
+        }
+        a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="app" @click='appMethod'>
+        <button @click="sendNull">不传参数</button>
+        <!-- 传入一个参数 -->
+        <button v-on:click="say('hi')">Say hi</button>
+        <button v-on:click="say('what')">Say what</button>
+        <!-- 传入多个参数 有时也需要在内联语句处理器中访问原始的 DOM 事件。可以用特殊变量 $event 把它传入方法： -->
+        <button @click="sendMore('内容',$event)">传入第二个参数</button>
+        <!-- <a @click="sayHi('a标签跳转',$event)" href="https://www.baidu.com/">说你好</a> -->
+        <!-- <a @click.stop="sayHi('a标签跳转')" href="https://www.baidu.com/">说你好</a> -->
+        <a @click.stop.prevent="sayHi('a标签跳转')" href="https://www.baidu.com/">说你好</a>
+    </div>
+
+  <!-- 生产环境版本，优化了尺寸和速度 -->
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script>
+      const vm = new Vue({
+          el: "#app",
+          data: {
+            msg: '石老师的事件处理',
+           
+          },
+          computed: {
+          },
+          methods: {
+            sendNull(event) {
+                console.log('打印事件对象',event);
+            },
+            say(message) {
+                console.log(message);
+            },
+            sendMore(param,event) {
+                console.log('传入的第一个参数',param);
+                console.log('传入的第二个参数事件对象',event);
+            },
+            appMethod() {
+                console.log('触发了app的事件，看是否有内部元素触发冒泡这个事件');
+            },
+            // sayHi(msg,event) {
+            sayHi(msg) {
+                // event.preventDefault();
+                // console.log('阻止了事件的默认传播，自身确实不会传播，但还是触发了app的事件 冒泡了');
+                // event.stopPropagation();
+                console.log('阻止了事件的默认传播，自身确实不会传播，阻止事件的冒泡方法，父级元素的事件也不会触发');
+
+                // 1.event.stopPropagation()方法
+                // 这是阻止事件的冒泡方法，不让事件向documen上层蔓延，但是默认事件任然会执行，当你调用这个方法的时候，如果点击一个连接，这个连接仍然会被打开。
+                
+                // 2.event.preventDefault()方法
+                // 这是阻止默认事件的方法，调用此方法是，连接不会被打开，但是会发生冒泡，冒泡会传递到上一层的父元素，此方法可以控制一些按钮在点击时只触发时间而不会引起表单的提交。
+
+                // 3.return false；
+                // 这个方法比较暴力，他会同事阻止事件冒泡也会阻止默认事件；写上此代码，连接不会被打开，事件也不会传递到上一层的父元素；可以理解为return false就等于同时调用了event.stopPropagation()和event.preventDefault()
+                
+            }
+          },
+      })
+  
+  
+  </script>
+</body>
+</html>
