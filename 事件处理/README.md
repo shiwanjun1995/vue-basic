@@ -1,11 +1,11 @@
-#事件传递参数
+# 事件传递参数
 ```html
 <button v-on:click="say('hi')">Say hi</button>
 <!-- 手动传入$event 并且前面传了参数 第二个参数是事件对象 -->
 <a @click="sayHi('a标签跳转',$event)" href="https://www.baidu.com/">说你好</a>
 ```
 
-#事件修饰符
+# 事件修饰符
 Vue.js 为 v-on 提供了事件修饰符。之前提过，修饰符是由点开头的指令后缀来表示的。
 ```html
 <!-- 阻止单击事件继续传播 -->
