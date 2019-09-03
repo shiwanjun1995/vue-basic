@@ -1,4 +1,4 @@
-#列表渲染
+# 列表渲染
 我们可以用 v-for 指令基于一个数组来渲染一个列表。v-for 指令需要使用 item in items 形式的特殊语法，其中 items 是源数据数组，而 item 则是被迭代的数组元素的别名。该指令可以访问所有父作用域的属性 还支持一个可选的第二个参数，即当前项的索引。你也可以用 of 替代 in 作为分隔符，因为它更接近 JavaScript 迭代器的语法：
 
 ```html
@@ -21,7 +21,7 @@ example1.items = example1.items.filter(function (item) {
 })
 ```
 
-##注意项
+## 注意项
 由于 JavaScript 的限制，Vue 不能检测以下数组的变动：
 当你利用索引直接设置一个数组项时，例如：vm.items[indexOfItem] = newValue
 当你修改数组的长度时，例如：vm.items.length = newLength
@@ -32,11 +32,11 @@ example1.items = example1.items.filter(function (item) {
 实例方法：vm.$set(vm.items, indexOfItem, newValue); // 你也可以使用 vm.$set 实例方法，该方法是全局方法 Vue.set 的一个别名：
 ```
 
-##显示过滤/排序后的结果
+## 显示过滤/排序后的结果
 有时，我们想要显示一个数组经过过滤或排序后的版本，而不实际改变或重置原始数据。在这种情况下，可以创建一个计算属性(或者方法)，来返回过滤或排序后的数组。
 
 
-#在 <template> 上使用 v-for
+# 在 <template> 上使用 v-for
 ```html
 <ul>
   <template v-for="item in items">
@@ -46,7 +46,7 @@ example1.items = example1.items.filter(function (item) {
 </ul>
 ```
 
-##vue中DOM更新是异步的 
+## vue中DOM更新是异步的 
 将数据修改之后，DOM并没有即时更新，而是等到vue下一次的渲染工作执行的时候，才会更新DOM 什么时候进行下一次渲染？比如页面数据发生改变的时候
 ```js
 this.$nextTick(() => { 

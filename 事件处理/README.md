@@ -26,13 +26,13 @@ Vue.js 为 v-on 提供了事件修饰符。之前提过，修饰符是由点开�
 注意：使用修饰符时，顺序很重要；相应的代码会以同样的顺序产生。因此，用 v-on:click.prevent.self 会阻止所有的点击，而 v-on:click.self.prevent 只会阻止对元素自身的点击。
 ```
 
-#按键修饰符
+# 按键修饰符
 ```html
 <!-- 只有在 `key` 是 `Enter` 时调用 `vm.submit()` -->
 <input v-on:keyup.enter="submit"> 在上述示例中，处理函数只会在 $event.key 等于 PageDown 时被调用。
 ```
 
-#按键码
+# 按键码
 keyCode 的事件用法已经被废弃了并可能不会被最新的浏览器支持。
 使用 keyCode 特性也是允许的：
 ```html
@@ -49,10 +49,10 @@ keyCode 的事件用法已经被废弃了并可能不会被最新的浏览器支
 .right
 ```
 
-#其它的修饰符
+# 其它的修饰符
 https://cn.vuejs.org/v2/guide/events.html#内联处理器中的方法
 
-#为什么在 HTML 中监听事件?
+# 为什么在 HTML 中监听事件?
 你可能注意到这种事件监听的方式违背了关注点分离 (separation of concern) 这个长期以来的优良传统。但不必担心，因为所有的 Vue.js 事件处理方法和表达式都严格绑定在当前视图的 ViewModel 上，它不会导致任何维护上的困难。实际上，使用 v-on 有几个好处：
 * 扫一眼 HTML 模板便能轻松定位在 JavaScript 代码里对应的方法。
 * 因为你无须在 JavaScript 里手动绑定事件，你的 ViewModel 代码可以是非常纯粹的逻辑，和 DOM 完全解耦，更易于测试。

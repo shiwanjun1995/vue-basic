@@ -29,6 +29,13 @@
         <!-- <input v-model="lazyMsg" placeholder="input的时候不会更新"> -->
         <input v-model.lazy="lazyMsg" placeholder="input的时候不会更新">
         <p>{{lazyMsg}}</p>
+
+        <!-- 自动将用户输入的值转化为number类型 -->
+        <input v-model.number="age" type="number">
+        <p>{{age}}</p>
+
+        <!-- 去除用户输入的首尾空白字符 -->
+        <input v-model.trim="spaceMsg" type="text">
     </div>
 
   <!-- 生产环境版本，优化了尺寸和速度 -->
@@ -40,6 +47,8 @@
             msg: '石老师的表单输入绑定',
             moreline: '',
             lazyMsg: '',
+            age: '',
+            spaceMsg: '   前面有三个空格  中间两个后面一个',
            
           },
           computed: {
