@@ -36,7 +36,7 @@ example1.items = example1.items.filter(function (item) {
 有时，我们想要显示一个数组经过过滤或排序后的版本，而不实际改变或重置原始数据。在这种情况下，可以创建一个计算属性(或者方法)，来返回过滤或排序后的数组。
 
 
-# 在 <template> 上使用 v-for
+## 在 <template> 上使用 v-for
 ```html
 <ul>
   <template v-for="item in items">
