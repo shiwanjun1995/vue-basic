@@ -17,9 +17,17 @@
         .father {
             border: 1px solid red;
         }
-        .class-son {
+        .class-son,
+        .class-son1, 
+        .class-son2 {
             border: 1px solid blueviolet;
             background-color: pink;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+        .sun-method-father {
+            border: 1px solid #f40;
+            background-color: skyblue;
         }
     </style>
 </head>
@@ -74,6 +82,7 @@
 
         <!-- 监听子组件事件 并使用事件抛出一个值 -->
         <div :style="{ fontSize: postFontSize + 'em' }">
+            <p>父组件就是一个模板就可以 形成嵌套关系 外面有一个包裹的wrap</p>
             <son-two-param
                 :msgfromfather="msgfather"
                 v-on:enlarge-msg="onEnlargeMsg"
@@ -96,14 +105,30 @@
             <p>我是父级组件 通过props给子组件传参</p>
             <!-- 属性名字可以取一样的 -->
             <son-act
+                username="李罡" 
+                color="green"
                 :hobby="hobbyFather"
             ></son-act>
+        </div>
+
+        <!-- 子组件传递数据给父组件 -->
+        <div class="sun-method-father">
+            <p>我是父组件 现在想要接收子组件的数据</p>
+            <h5>步骤一：父组件中引入这个子组件 并在页面应用到该组件</h5>
+            <h4>步骤二：在父组件中定义一个方法 这个方法接受一个参数 用于接收子组件传递的数据</h4>
+            <h3>步骤三：父组件怎么知道子组件传递函数呢？他像处理原生DOM一样通过 v-on 来监听子组件实例的任意事件(短横线自定义的事件等)</h3>
+            <h2>步骤四：当子组件中需要传递数据给父组件 子组件点击按钮触发这个事件的时候 就能够间接地调用父组件中的函数 父组件就可以获取到子组件传递过来的数据了！</h2>
+            <son-comp
+                v-on:send-msg="getMsgFsun"
+            ></son-comp>
+
         </div>
         
     </div>
 
   <!-- 生产环境版本，优化了尺寸和速度 -->
   <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
   <script>
       // 组件中包含html,css,js
 
@@ -144,16 +169,16 @@
       Vue.component('son', {
           props: ['username','height','color'],
           template: `
-            <div class="class-son">
+            <div class="class-son1">
                 <p>我是子组件</p>
-                <span>身高:{{height}}</span>
                 <span>名字:{{username}}</span>
                 <span>颜色:{{color}}</span>
-                <button @click="getProps">点击获取父亲传给我的参数</button>
+                <button @click="getProps">点击获取父亲传给我的参数[给我个身高]</button>
             </div>
           `,
           methods: {
             getProps () {
+                $('.class-son1 button').before(`<span>${this.username}的身高是：${this.height}</span>`);
                 console.log(this.height);
             }
           }
@@ -163,16 +188,18 @@
       // 子组件拿值  
       Vue.component('son-act', {
           // 引入参数
-          props: ['hobby'],
+          props: ['hobby','username','color'],
           template: `
-            <div class="class-son">
+            <div class="class-son2">
                 <p>我是子组件</p>
-                <p>爱好:{{hobby}}</p>
-                <button @click="getPropsAct">点击获取父亲传给我的动态参数</button>
+                <span>名字:{{username}}</span>
+                <span>颜色:{{color}}</span>
+                <button @click="getPropsAct">点击获取父亲传给我的动态参数[给我个爱好]</button>
             </div>
           `,
           methods: {
             getPropsAct() {
+                $('.class-son2 button').before(`<span>${this.username}的爱好是：${this.hobby}</span>`);
                 console.log(this.hobby);
             }
           }
@@ -208,6 +235,7 @@
           </div>
           `
       })
+      
 
       // 2. 局部注册 
       // 注意名字现在是驼峰命名法
@@ -237,6 +265,23 @@
                     }
                 },
                 template: '<button @click="count++">点击一次数值加1&nbsp;&nbsp;{{count}}</button>'
+            },
+
+            sonComp: {
+                data() {
+                    return {
+                        msg: '爹，没钱花了！打点钱吧！'
+                    }
+                },
+                template: `<button @click="sendMsg">李罡发送消息给李父</button>`,
+                methods: {
+                    sendMsg() {
+                        // 两种方式 
+                        // 一种是直接在子组件后 @click="$emit('send-msg',参数)"
+                        // 另外是写一个事件名 this.$emit(事件名称, 参数) 这个是用来触发事件的！
+                        this.$emit('send-msg',this.msg)
+                    }
+                }
             }
           },
           methods: {
@@ -244,6 +289,12 @@
             onEnlargeMsg(val) {
                 console.log(val);
                 this.postFontSize += val
+            },
+
+            getMsgFsun(val) {
+                // $('.sun-method-father h2').after(`<h1>结果：看看儿子是想要给老爹什么信息${val}</h1>`)
+                $('.sun-method-father button').before(`<h1>结果：看看儿子是想要给老爹什么信息${val}</h1>`);
+                console.log('看看儿子是想要给老爹什么信息',val);
             }
           },
       })
