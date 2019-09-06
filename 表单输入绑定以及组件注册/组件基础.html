@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>组件基础</title>
+    <style>
+       button {
+            height: 20px;
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            background-image: linear-gradient(46deg, #FB803A 0%, #F1961B 100%);
+            box-shadow: -0.02px 0.1rem 0.2rem rgba(241, 150, 27, 0.23);
+        }
+        .father {
+            border: 1px solid red;
+        }
+        .class-son {
+            border: 1px solid blueviolet;
+            background-color: pink;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        {{msg}}
+        <!-- 全局组件 -->
+        <btn-count></btn-count>
+        <btn-count-data></btn-count-data>
+        <!-- 局部组件 -->
+        <!-- 组件的复用 -->
+        <btn-count-more-data></btn-count-more-data>
+        <btn-count-more-data></btn-count-more-data>
+        <btn-count-more-data></btn-count-more-data>
+        <btn-count-more-data></btn-count-more-data>
+        <!-- 父组件传值prop -->
+        <blog-post title="One"></blog-post>
+        <blog-post title="Two"></blog-post>
+        <blog-post title="Three"></blog-post>
+
+        <!-- 为每篇博文渲染一个组件 -->
+        <blog-post 
+            v-for = "item in items"
+            :key = "item.id"
+            :title = "item.title"
+        ></blog-post>
+        <blog-post 
+            v-for = "item in items"
+            :key = "item.id"
+            :title = "item.title"
+        ></blog-post>
+
+        <!-- 重构该组件 -->
+        <blog-rpost
+            v-for = "item in items"
+            :key = "item.id"
+            :post = "item"
+        ></blog-rpost>
+
+        <!-- 监听子组件事件 -->
+        <!-- 自定义事件名为 enlarge-text -->
+        <!-- 捕捉到事件之后进行的操作为postFontSize += 0.1(postFontSize是Vue示例内部data部分的一个数据)。 -->
+        <div :style="{ fontSize: postFontSize + 'em' }">
+            <blog-post-son
+                v-for = "item in items"
+                :key = "item.id"
+                :post = "item"
+                :msgfromfather = "msgfather"
+                v-on:enlarge-text = "postFontSize += 0.1"
+            ></blog-post-son>
+        </div>
+
+        <!-- 监听子组件事件 并使用事件抛出一个值 -->
+        <div :style="{ fontSize: postFontSize + 'em' }">
+            <son-two-param
+                :msgfromfather="msgfather"
+                v-on:enlarge-msg="onEnlargeMsg"
+            >
+            Something bad happened.</son-two-param>
+        </div>
+        
+        <!-- 父组件就是一个模板就可以 形成嵌套关系 静态数据-->
+        <div class="father">
+            <p>我是父级组件 通过props给子组件传参</p>
+            <son 
+                username="李罡" 
+                :height="170" 
+                color="green"
+            ></son>
+        </div>
+
+        <!-- 父组件传参 动态数据 -->
+        <div class="father">
+            <p>我是父级组件 通过props给子组件传参</p>
+            <!-- 属性名字可以取一样的 -->
+            <son-act
+                :hobby="hobbyFather"
+            ></son-act>
+        </div>
+        
+    </div>
+
+  <!-- 生产环境版本，优化了尺寸和速度 -->
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script>
+      // 组件中包含html,css,js
+
+      // 如何注册组件
+        
+      // 1. 全局注册
+      // 注意名字 写的时候是什么名字 引用的时候就写什么名字
+      Vue.component('btn-count', {
+          template: "<button>这是一个按钮</button>"
+      })
+
+      Vue.component('btn-count-data', {
+        data() {
+            return {
+                count: 0
+            }
+        },
+        template: '<button @click="count++">点击了我{{count}}次</button>'
+      })
+
+      Vue.component('blog-post', {
+          props: ['title'],
+          template: '<h3>{{title}}</h3>'
+      })
+
+      Vue.component('blog-rpost', {
+          props: ['post'],
+          template: `
+            <div class="class-name">
+                <h3>{{post.title}}</h3>
+                <div v-html="post.content"></div>
+            </div>
+          `
+      })
+
+      // 注册形成嵌套关系的子组件
+      // 然而如果你在模板中尝试这样写，Vue 会显示一个错误，并解释道 every component must have a single root element (每个组件必须只有一个根元素)。你可以将模板的内容包裹在一个父元素内，来修复这个问题，例如：
+      Vue.component('son', {
+          props: ['username','height','color'],
+          template: `
+            <div class="class-son">
+                <p>我是子组件</p>
+                <span>身高:{{height}}</span>
+                <span>名字:{{username}}</span>
+                <span>颜色:{{color}}</span>
+                <button @click="getProps">点击获取父亲传给我的参数</button>
+            </div>
+          `,
+          methods: {
+            getProps () {
+                console.log(this.height);
+            }
+          }
+      })
+
+
+      // 子组件拿值  
+      Vue.component('son-act', {
+          // 引入参数
+          props: ['hobby'],
+          template: `
+            <div class="class-son">
+                <p>我是子组件</p>
+                <p>爱好:{{hobby}}</p>
+                <button @click="getPropsAct">点击获取父亲传给我的动态参数</button>
+            </div>
+          `,
+          methods: {
+            getPropsAct() {
+                console.log(this.hobby);
+            }
+          }
+      })
+
+
+      // 这里写的是子组件
+
+      // 现在的情况是这个按钮不会做任何事情 那怎么办呢
+      // 幸好 Vue 实例提供了一个自定义事件的系统来解决这个问题。父级组件可以像处理 native DOM 事件一样通过 v-on 监听子组件实例的任意事件：
+      // 在子组件中设置这个自定义事件是如何触发的 $emit 可以触发一个自定义事件
+      Vue.component('blog-post-son', {
+        props: ['post'],
+        template: `
+            <div class="class-name">
+                <h3>{{post.title}}</h3>
+                <button v-on:click="$emit('enlarge-text')">放大文本</button>
+                <div v-html="post.content"></div>
+            </div>
+        `
+      })
+
+       // 写入第二个参数
+       // $emit传入的事件名称只能使用小写，不能使用大写的驼峰规则命名 模板和触发的方法名都要改成小写
+       Vue.component('son-two-param',{
+          props:['msgfromfather'],
+          template: `
+          <div class="class-son">
+            <p>我是子组件</p>
+            <p>{{msgfromfather}}</p>
+            <slot></slot>
+            <button v-on:click="$emit('enlarge-msg',0.01)">放大文本添加第二个参数</button>
+          </div>
+          `
+      })
+
+      // 2. 局部注册 
+      // 注意名字现在是驼峰命名法
+      // 如何在页面中使用已经创建好的组件
+      // 直接写标签，标签名就是组件名
+
+      const vm = new Vue({
+          el: "#app",
+          data: {
+            msg: '石老师的组件注册',
+            postFontSize: 1,
+            msgfather: '这个是父组件的数据',
+            hobbyFather: '♂男人',
+            // 需要渲染的博文数组
+            items: [
+                {id: 1, title: '第一项', content: `<h2 style="color:red;">这个是第一项的主体内容</h2>`},
+                {id: 2, title: '第二项', content: `<h2 style="background-color:green;">这个是第二项的主体内容</h2>`},
+                {id: 3, title: '第三项', content: `<h2 style="color:pink;">这个是第三项的主体内容</h2>`},
+            ]
+          },
+          computed: {},
+          components: {
+            btnCountMoreData: {
+                data() {
+                    return {
+                        count: 0
+                    }
+                },
+                template: '<button @click="count++">点击一次数值加1&nbsp;&nbsp;{{count}}</button>'
+            }
+          },
+          methods: {
+              // 父组件要触发的函数
+            onEnlargeMsg(val) {
+                console.log(val);
+                this.postFontSize += val
+            }
+          },
+      })
+  
+  
+  </script>
+</body>
+</html>
