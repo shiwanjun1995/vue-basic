@@ -84,7 +84,7 @@
         <div :style="{ fontSize: postFontSize + 'em' }">
             <p>父组件就是一个模板就可以 形成嵌套关系 外面有一个包裹的wrap</p>
             <son-two-param
-                :msgfromfather="msgfather"
+                :msg-from-father="msgfather"
                 v-on:enlarge-msg="onEnlargeMsg"
             >
             Something bad happened.</son-two-param>
@@ -166,6 +166,7 @@
 
       // 注册形成嵌套关系的子组件
       // 然而如果你在模板中尝试这样写，Vue 会显示一个错误，并解释道 every component must have a single root element (每个组件必须只有一个根元素)。你可以将模板的内容包裹在一个父元素内，来修复这个问题，例如：
+      // 子组件要显式地用 props 选项声明它期待获得的数据
       Vue.component('son', {
           props: ['username','height','color'],
           template: `
@@ -225,11 +226,13 @@
        // 写入第二个参数
        // $emit传入的事件名称只能使用小写，不能使用大写的驼峰规则命名 模板和触发的方法名都要改成小写
        Vue.component('son-two-param',{
-          props:['msgfromfather'],
+          // props:['msgfromfather'],
+          // 子级 props 属性声明的时候 使用小驼峰/中划线写法都可以
+          props:['msg-from-father'],
           template: `
           <div class="class-son">
             <p>我是子组件</p>
-            <p>{{msgfromfather}}</p>
+            <p>{{msgFromFather}}</p>
             <slot></slot>
             <button v-on:click="$emit('enlarge-msg',0.01)">放大文本添加第二个参数</button>
           </div>
