@@ -56,14 +56,14 @@
         ></blog-post>
         <blog-post 
             v-for = "item in items"
-            :key = "item.id"
+            :key = "item.id + '2'"
             :title = "item.title"
         ></blog-post>
 
         <!-- 重构该组件 -->
         <blog-rpost
             v-for = "item in items"
-            :key = "item.id"
+            :key = "item.id + '1'"
             :post = "item"
         ></blog-rpost>
 
@@ -121,13 +121,24 @@
             <son-comp
                 v-on:send-msg="getMsgFsun"
             ></son-comp>
-
         </div>
+
+        <!-- 子组件修改props 当成局部数据来使用-->
+        <div class="sun-change-father">
+            <p>我是父级组件 通过props给子组件传参</p>
+            <p>现在子组件是需要修改我传给他的数据</p>
+            <!-- <h3>子组件自己定义的局部变量 当父组件传递的值发生变化 该值无法接收到最新值 初始值:{{sondataDefault}}</h3> -->
+            <son-change-comp
+              :weight="weightFather"
+            ></son-change-comp>
+        </div>
+
         
     </div>
 
   <!-- 生产环境版本，优化了尺寸和速度 -->
-  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+  <script src="https://unpkg.com/vue"></script>
   <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
   <script>
       // 组件中包含html,css,js
@@ -189,7 +200,13 @@
       // 子组件拿值  
       Vue.component('son-act', {
           // 引入参数
-          props: ['hobby','username','color'],
+          // props: ['hobby','username','color'],
+          props: {
+            hobby: String,
+            username: String,
+            // color: Number, 会提醒警告
+            color: String,
+          },
           template: `
             <div class="class-son2">
                 <p>我是子组件</p>
@@ -238,6 +255,35 @@
           </div>
           `
       })
+
+      Vue.component('son-change-comp', {
+        props:['weight'],
+        template: `
+        <div class="class-son">
+            <p>我是子组件</p>
+            <span>重量:{{weight}}</span>
+            <span>初始值:{{sondataDefault}}</span>
+            <button @click="getPropsFn">李罡接收来自李父的值</button>
+          </div>
+        `,
+        data() {
+          return {
+            // 使用变量存prop的初始值 并使用watch来观察prop的变化 发生变化时 更新变量的值 (son)
+            sondataDefault: this.weight
+          }
+        },
+        watch: {
+          // weight() {
+          //   this.sondataDefault = this.weight
+          //   console.log("父亲传的值发生改变，儿子的操作开始...")
+          // }
+        },
+        methods: {
+          getPropsFn() {
+            console.log(this.weight,'给了个重量');
+          }
+        }
+      })
       
 
       // 2. 局部注册 
@@ -252,6 +298,7 @@
             postFontSize: 1,
             msgfather: '这个是父组件的数据',
             hobbyFather: '♂男人',
+            weightFather: '90kg',
             // 需要渲染的博文数组
             items: [
                 {id: 1, title: '第一项', content: `<h2 style="color:red;">这个是第一项的主体内容</h2>`},
@@ -285,7 +332,8 @@
                         this.$emit('send-msg',this.msg)
                     }
                 }
-            }
+            },
+
           },
           methods: {
               // 父组件要触发的函数
