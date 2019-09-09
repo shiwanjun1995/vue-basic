@@ -163,3 +163,5 @@ components: {
 两种方式 
 * 一种是直接在子组件后 @click="$emit('send-msg',参数)"
 * 另外是写一个事件名 this.$emit(事件名称, 参数) 这个是用来触发事件的！
+
+参考链接：1.https://www.jianshu.com/p/d0cc6eb0226e 2.https://www.cnblogs.com/xiaohuochai/p/7388866.html
