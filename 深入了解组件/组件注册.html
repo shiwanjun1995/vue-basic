@@ -11,15 +11,46 @@
             border: none;
             border-radius: 10px;
             color: #fff;
-            background-image: linear-gradient(46deg, #FB803A 0%, #F1961B 100%);
+            background-image: linear-gradient(46deg, #FB803A 0%, red 100%);
             box-shadow: -0.02px 0.1rem 0.2rem rgba(241, 150, 27, 0.23);
         }
-    
     </style>
 </head>
 <body>
     <div id="app">
-        
+        <h1>{{ msg }}</h1>
+        <!-- 当使用短横线定义的组件的时候 也必须在引用这个自定义组件的时候使用短横线 -->
+        <colorful-button></colorful-button>
+        <colorful-sp></colorful-sp>
     </div>
+
+    <script src="https://unpkg.com/vue"></script>
+    <script>
+
+        /* 这里写的是注册的组件 */
+        // 1. 使用 kebab-case 多横线分割
+        Vue.component('colorful-button',{
+            template: `
+                <button>这边是自定义的彩色按钮</button>
+            `
+        })
+
+        // 2. 使用帕斯卡命名组件
+        // 注意，尽管如此，直接在 DOM (即非字符串的模板) 中使用时只有 kebab-case 是有效的。
+        Vue.component('ColorfulSp',{
+            template: `
+                <span>这边是自定义的彩色块</span>
+            `
+        })
+
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: '石老师的组件注册',
+            }
+        })
+        
+    
+    </script>
 </body>
 </html>
