@@ -14,19 +14,49 @@
             background-image: linear-gradient(46deg, #FB803A 0%, red 100%);
             box-shadow: -0.02px 0.1rem 0.2rem rgba(241, 150, 27, 0.23);
         }
+        .colorRed {
+            color: red;
+        }
     </style>
 </head>
 <body>
-    <div id="app">
+    <!-- 使用html模板的时候不能大写 -->
+    <div id="app-one">
         <h1>{{ msg }}</h1>
-        <!-- 当使用短横线定义的组件的时候 也必须在引用这个自定义组件的时候使用短横线 -->
+        当使用短横线定义的组件的时候 也必须在引用这个自定义组件的时候使用短横线
         <colorful-button></colorful-button>
-        <colorful-sp></colorful-sp>
+        <my-component-a></my-component-a>
+        <!-- <myComponentA></myComponentA> -->
     </div>
 
-    <script src="https://unpkg.com/vue"></script>
-    <script>
+    <div id="app-two">
+        <h1>{{ msgb }}}</h1>
+        <MyComponentB></MyComponentB>
+    </div>
 
+    <div id="app-three">
+        <component-a></component-a>
+    </div>
+
+    <div id="app-four">
+        <!-- 父组件传值prop -->
+        <blog-post title="One"></blog-post>
+        <!-- 下面这样写是错误的！！ -->
+        <!-- <component-c msgC="组件C"></component-c> -->
+        <!-- 在 HTML 中是 kebab-case 的 -->
+        <component-c msg-c="组件C"></component-c>
+        <!-- 这是一个 JavaScript 表达式而不是一个字符串 v-bind:绑定 -->
+        <like-huge :likes="99"></like-huge>
+        <component-d :prop-a="87" prop-b="2" prop-c="字符串" :prop-f="'success'"></component-d>
+        <!-- 非prop属性 -->
+        <test-not-prop class="colorRed" my-self-define></test-not-prop>
+    </div>
+
+  <!-- 生产环境版本，优化了尺寸和速度 -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+  <script src="https://unpkg.com/vue"></script>
+    <script>
+        // 全局注册就是在构造器的外部用Vue.component来注册。
         /* 这里写的是注册的组件 */
         // 1. 使用 kebab-case 多横线分割
         Vue.component('colorful-button',{
@@ -37,19 +67,157 @@
 
         // 2. 使用帕斯卡命名组件
         // 注意，尽管如此，直接在 DOM (即非字符串的模板) 中使用时只有 kebab-case 是有效的。
-        Vue.component('ColorfulSp',{
+        Vue.component('MyComponentA',{
             template: `
                 <span>这边是自定义的彩色块</span>
             `
         })
 
-        const vm = new Vue({
-            el: '#app',
+        Vue.component('MyComponentB',{
+            template: `
+                <span>这边是自定义的彩色块</span>
+            `
+        })
+
+        // Vue.component('component-c',{
+        //     // 在 JavaScript 中是 camelCase 的
+        //     props: ['msgC'],
+        //     template: `<h2>来自父组件的值{{msgC}}</h2>`,
+        // })
+
+        Vue.component('blog-post', {
+          props: ['title'],
+          template: '<h3>{{title}}</h3>'
+        })
+
+      Vue.component('component-d', {
+            props: {
+                // 基础的类型检查 (`null` 和 `undefined` 会通过任何类型验证)
+                propA: Number,
+                // 多个可能的类型
+                propB: [String, Number],
+                // 必填的字符串
+                propC: {
+                    type: String,
+                    required: true
+                },
+                // 带有默认值的数字
+                propD: {
+                    type: Number,
+                    default: 100
+                },
+                // 带有默认值的对象
+                propE: {
+                    type: Object,
+                    // 对象或数组默认值必须从一个工厂函数获取
+                    default: function () {
+                        return { message: 'hello' }
+                    }
+                },
+                // 自定义验证函数
+                propF: {
+                    validator: function (value) {
+                        // 这个值必须匹配下列字符串中的一个
+                        return ['success', 'warning', 'danger'].indexOf(value) !== -1
+                    }
+                },
+            },
+            template: `
+                <div>
+                    <h3>{{propA}}</h3>
+                    <h2>这个是必填项{{propC}}</h2>
+                    <h1>这个有默认值{{propD}}</h1>
+                    <h1>这个有默认值的对象{{propE}}</h1>
+                </div>
+            `
+        })
+
+        Vue.component('test-not-prop', {
+            data() {
+                return {}
+            },
+            template: `<div style="font-weight:bold;" class="defineSize">Test Not Prop</div>`
+        })
+
+        // 注意：props选项就是设置和获取标签上的属性值的，定义属性的选项是props。
+
+        // 模板解析分为两个过程 详解： 
+        /* 
+            1.首先Vue会将模板中的内容插入到DOM中 以方便解析标签 比如 你在书写组件名的时候用的是 <MyComponentName></MyComponentName>
+            插入到DOM中就变成了 <mycomponentname></mycomponentname> (由于 HTML 标签不区分大小写，所以在生成的标签名都会转换为小写)
+
+            2.然后通过标签名去寻找对应的自定义组件 匹配的优先顺序从高到低为：原标签名、camelCase化的标签名、PascalCase化的标签名
+            比如 <my-component>会依次匹配 my-component、myComponent、MyComponent
+        */
+
+        // 局部注册
+        const vm1 = new Vue({
+            el: '#app-one',
             data: {
-                msg: '石老师的组件注册',
+                msg: '石老师的组件注册-html模板',
             }
         })
-        
+
+        const vm2 = new Vue({
+            el: '#app-two',
+            template: '<MyComponentB></MyComponentB>',
+            data: {
+                msgb: '石老师的组件注册-字符串模板',
+            }
+        })
+
+        // 属性值是这个组件的选项对象
+        var ComponentA = {
+            data() {
+                return {
+                    msgA:'组件A的数据'
+                }
+            },
+            template: '<h2>{{msgA}}</h2>',
+        }
+
+        const vm3 = new Vue({
+            el: '#app-three',
+            data: {},
+            components: {
+                // 属性值是自定义元素的名字
+                'component-a': ComponentA
+            }
+        })
+
+        // HTML 中的特性名是大小写不敏感的，所以浏览器会把所有大写字符解释为小写字符。
+        // 这意味着当你使用 DOM 中的模板时，camelCase (驼峰命名法) 的 prop 名需要使用其等价的 kebab-case (短横线分隔命名) 命名：
+        const vm4 = new Vue({
+            el: '#app-four',
+            data: {
+                msgYanzhen:'propD验证只能传入数字类型'
+            },
+            components: {
+                // 属性值是自定义元素的名字
+                'component-c': {
+                // componentC: {
+                    data() {
+                        return {
+                            // msgC:'组件C的数据'
+                        }
+                    },
+                    template: `<h2>来自父组件的值{{msgC}}</h2>`,
+                    // 在 JavaScript 中是 camelCase 的
+                    props: ['msgC']
+                },
+                likeHuge: {
+                    props: ['likes'],
+                    template: `
+                    <h2>来自父组件的值{{likes}}其类型是{{type}}</h2>
+                    `,
+                    computed: {
+                        type() {
+                            return typeof this.likes
+                        }
+                    }
+                }
+            }
+        })
     
     </script>
 </body>
