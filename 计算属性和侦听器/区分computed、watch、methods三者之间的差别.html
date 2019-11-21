@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>三者混淆点</title>
+  <script src="https://cdn.bootcss.com/vue/2.5.16/vue.js"></script>
+  <style>
+    .content-box {
+      height: 500px;
+      /* background-color: #cff; */
+    }
+    .box-detail {
+      margin-top: 20px;
+      background-color: #0cc;
+    }
+    .detail {
+      background-color: #0cf;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="content-box">
+      <h2>相同点：methods,watch和computed都是以函数为基础</h2>
+      <h2>不同点</h2>
+      <div class="box-detail">
+        <span>定义</span>
+        <p>computed 是一个计算属性 通过属性计算而得来的属性 这个属性不能在data里面定义和赋值（变量不可被重复定义和赋值）</p>
+        <span>适用场景</span>
+        <p>1.适合对多个变量或者对象进行处理返回的一个结果值 一个值受多个属性影响---购物车商品结算 也就是数多个变量中的某一个值发生了变化则我们监控的这个值也就会发生变化，举例：购物车里面的商品列表和总金额之间的关系，只要商品列表里面的商品数量发生变化，或减少或增多或删除商品，总金额都应该发生变化。这里的这个总金额使用computed属性来进行计算是最好的选择</p>
+        <p>2.一般用于改变data或者props里面的值为己用 快速计算视图中显示的值 这些计算将被缓存 并且只在需要时更新</p>
+        <div class="detail">
+          <input type="text" v-model="firstName">
+          <input type="text" v-model="lastName">
+          <h1>{{ fullName }} </h1>
+          <button @click="setVal">set</button>
+        </div>
+      </div>
+      <div class="box-detail">
+        <span>定义</span>
+        <p>watch 是一个观察的动作 属性监听 主要用于监控vue实例上数据的变化 监控的变量必须要在data里面声明才可以 可以监控一个变量，也可以是一个对象注意两种写法不一样</p>
+        <span>应用场景</span>
+        <p>1.当需要在数据变化时执行异步或开销较大的操作时，这个方式是最有用的。</p>
+        <p>2.一般用于监控路由、input输入框处理 一个数据的更改影响多个数据---搜索框</p>
+      </div>
+
+      <div class="box-import">
+        <h2>computed和methods 计算属性是基于它们的响应式依赖进行缓存的。只在相关响应式依赖发生改变时它们才会重新求值 相比之下，每当页面触发重新渲染时，调用方法将总会再次执行函数。</h2>
+      </div>
+    </div>
+  </div>
+  <script>
+    const vm = new Vue({
+      el: '#app',
+      data: {
+        firstName: '迈克尔',
+        lastName: '杰克逊',
+        test:"",
+        // fullName: '', 计算属性不能在data里面赋值
+      },
+      computed: {
+        // fullName() {
+        //   return this.firstName + '.' + this.lastName
+        // }
+
+        fullName: {
+          // 读取当前属性值时候执行 （可读）
+          // 根据相关数据计算并返回当前属性的值
+          get: function () {
+            console.log('aa');
+            return this.firstName + this.lastName
+          },
+          // 设置当前属性值时候执行（可写）
+          // 监视当前属性值的变化 当属性值发生变化时执行 更新相关的属性数据
+          // 会传入一个参数 这个参数就是就是传过来的fullName的最新属性值
+          set: function (val) {
+            console.log('我被设置成最新值了',val);
+            this.firstName = val[0];
+            this.lastName = val[1];
+          }
+        }
+      },
+      watch: {
+        // 可以深度监听 监听对象的变化
+        // 如果对整个对象进行监听的话 只要修改了这个对象的某个属性 都会执行 handler方法 这样开销会很大 尤其是对象里面结构嵌套过深的时候 
+        // 如果我们就想关心这个对象的某个属性的话 可以这样写 'obj.key'(newVal) {console.log(newVal)}
+      },
+      methods: {
+        setVal() {
+          vm.fullName = ["迈克","尔杰克逊"]
+        },
+      },
+    })
+
+    // 参考链接： 1.https://www.cnblogs.com/gunelark/p/8492468.html
+  </script>
+</body>
+</html>
