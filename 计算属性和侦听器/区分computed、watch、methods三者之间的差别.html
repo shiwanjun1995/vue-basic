@@ -18,6 +18,9 @@
     .detail {
       background-color: #0cf;
     }
+    .real-box {
+      background-color: pink;
+    }
   </style>
 </head>
 <body>
@@ -29,12 +32,17 @@
         <span>定义</span>
         <p>computed 是一个计算属性 通过属性计算而得来的属性 这个属性不能在data里面定义和赋值（变量不可被重复定义和赋值）</p>
         <span>适用场景</span>
-        <p>1.适合对多个变量或者对象进行处理返回的一个结果值 一个值受多个属性影响---购物车商品结算 也就是数多个变量中的某一个值发生了变化则我们监控的这个值也就会发生变化，举例：购物车里面的商品列表和总金额之间的关系，只要商品列表里面的商品数量发生变化，或减少或增多或删除商品，总金额都应该发生变化。这里的这个总金额使用computed属性来进行计算是最好的选择</p>
-        <p>2.一般用于改变data或者props里面的值为己用 快速计算视图中显示的值 这些计算将被缓存 并且只在需要时更新</p>
+        <p>1.简化tempalte里面{{}}计算和处理props或$emit的传值</p>
+        <p>2.适合对多个变量或者对象进行处理返回的一个结果值 一个值受多个属性影响---购物车商品结算 也就是数多个变量中的某一个值发生了变化则我们监控的这个值也就会发生变化，举例：购物车里面的商品列表和总金额之间的关系，只要商品列表里面的商品数量发生变化，或减少或增多或删除商品，总金额都应该发生变化。这里的这个总金额使用computed属性来进行计算是最好的选择</p>
+        <p>3.一般用于改变data或者props里面的值为己用 快速计算视图中显示的值 这些计算将被缓存 并且只在需要时更新</p>
+        <p>4.计算属性的结果会被缓存，除非依赖的响应式属性变化才会重新计算。注意，如果某个依赖 (比如非响应式属性) 在该实例范畴之外，则计算属性是不会被更新的。</p>
         <div class="detail">
           <input type="text" v-model="firstName">
           <input type="text" v-model="lastName">
+          <input type="text" v-model="fullName">
+          <input type="text" v-model="user.name">
           <h1>{{ fullName }} </h1>
+          <p>{{ test }}</p>
           <button @click="setVal">set</button>
         </div>
       </div>
@@ -42,12 +50,31 @@
         <span>定义</span>
         <p>watch 是一个观察的动作 属性监听 主要用于监控vue实例上数据的变化 监控的变量必须要在data里面声明才可以 可以监控一个变量，也可以是一个对象注意两种写法不一样</p>
         <span>应用场景</span>
-        <p>1.当需要在数据变化时执行异步或开销较大的操作时，这个方式是最有用的。</p>
-        <p>2.一般用于监控路由、input输入框处理 一个数据的更改影响多个数据---搜索框</p>
+        <p>1.监听props，$emit或本组件的值执行异步操作</p>
+        <p>2.当需要在数据变化时执行异步或开销较大的操作时，这个方式是最有用的。</p>
+        <p>3.一般用于监控路由、input输入框处理 一个数据的更改影响多个数据---搜索框</p>
+        <p>4.watch是一个对象，键是  需要观察的表达式，值是  对应回调函数，或是方法名，或者包含选项的对象。</p>
       </div>
 
       <div class="box-import">
-        <h2>computed和methods 计算属性是基于它们的响应式依赖进行缓存的。只在相关响应式依赖发生改变时它们才会重新求值 相比之下，每当页面触发重新渲染时，调用方法将总会再次执行函数。</h2>
+        <span>总结</span>
+        <h2>1.watch和computed都是以Vue的依赖追踪机制为基础的，它们都试图处理这样一件事情：当某一个数据（称它为依赖数据）发生变化的时候，所有依赖这个数据的“相关”数据“自动”发生变化，也就是自动调用相关的函数去实现数据的变动。 </h2>
+        <h2>2.对methods:methods里面是用来定义函数的，很显然，它需要手动调用才能执行。而不像watch和computed那样，“自动执行”预先定义的函数 </h2>
+        <h2>3.computed在数据未发生变化时，优先读取缓存。computed 计算属性只有在相关的数据发生变化时才会改变要计算的属性，当相关数据没有变化时，它会读取缓存。而不必想 motheds方法 和 watch 方法是的每次都去执行函数。</h2>
+        <span>watch和computed各自处理的数据关系场景不同 </span>
+        <h2>watch方法每次只能监听一个data值的变化</h2>
+        <h2>而计算属性可以同时监听多个data值的变化，且用计算属性可以简化watch中重复的代码</h2>
+      </div>
+
+      <h1>三种方法的实际应用场景 实现相同的效果</h1>
+      <div class="real-box">
+        <h2>Language Search</h2>
+        <!-- <input type="text" v-model="input" @keyup="handleSearch" placeholder="请输入"> -->
+        <input type="text" v-model="input" placeholder="请输入">
+        <ul>
+          <li v-for="(item,index) in languages" :key="index">{{ item }}</li>
+          <!-- <li v-for="(item,index) in filteredList" :key="index">{{ item }}</li> -->
+        </ul>
       </div>
     </div>
   </div>
@@ -57,7 +84,20 @@
       data: {
         firstName: '迈克尔',
         lastName: '杰克逊',
-        test:"",
+        test: "",
+        user: {
+          name: ''
+        },
+        input: '',
+        languages: [
+        // 'JavaScript',
+        //   'Ruby',
+        //   'Scala',
+        //   'Python',
+        //   'Java',
+        //   'Kotlin',
+        //   'Elixir'
+        ]
         // fullName: '', 计算属性不能在data里面赋值
       },
       computed: {
@@ -70,26 +110,92 @@
           // 根据相关数据计算并返回当前属性的值
           get: function () {
             console.log('aa');
-            return this.firstName + this.lastName
+            return this.firstName + '.' + this.lastName
           },
           // 设置当前属性值时候执行（可写）
           // 监视当前属性值的变化 当属性值发生变化时执行 更新相关的属性数据
           // 会传入一个参数 这个参数就是就是传过来的fullName的最新属性值
-          set: function (val) {
-            console.log('我被设置成最新值了',val);
-            this.firstName = val[0];
-            this.lastName = val[1];
+          // set: function (val) {
+          //   console.log('我被设置的最新值是',val,this);
+          //   this.firstName = val.split('.')[0];
+          //   this.lastName = val.split('.')[1];
+          // },
+
+          // 注意： computed不能使用箭头函数 箭头函数绑定了父级作用域上下文
+          set: (val) => {
+            console.log(val, this);
           }
+        },
+
+        filteredList() {
+          return this.languages.filter(item => item.toLowerCase().includes(this.input.toLowerCase()))
         }
       },
       watch: {
         // 可以深度监听 监听对象的变化
         // 如果对整个对象进行监听的话 只要修改了这个对象的某个属性 都会执行 handler方法 这样开销会很大 尤其是对象里面结构嵌套过深的时候 
         // 如果我们就想关心这个对象的某个属性的话 可以这样写 'obj.key'(newVal) {console.log(newVal)}
+
+        // 是一个函数 可以执行操作
+        firstName() {
+          this.test = '数据发生改变 页面中所有的指令以及表达式都会被重新计算一次'
+        },
+        user: {
+          handler(newVal,oldVal) {
+            // console.log('new: %s, old: %s', val, oldVal)
+            console.log('新值',newVal);
+            console.log('旧值',oldVal);
+
+            // 打印结果发现 新值和旧值是一样的 所以深度监视虽然可以监听到对象的变化 但是无法监听到具体对象里面哪个属性的变化
+            // 打印结果一致的原因是他们指向的是同一个对象/数组 vue不会宝璐修改之前值的副本
+          },
+          deep: true,
+        },
+        'user.name': function (val, oldVal) { 
+          console.log('新',val);
+          console.log('旧',oldVal);
+        },
+
+        input: {
+          // 这样，我可以指定一个immediate属性，该属性将导致观察者在安装组件后立即触发。这具有填充列表的效果。然后，运行的函数在该handler属性中。
+          handler() {
+            this.languages = [
+            'JavaScript',
+            'Ruby',
+            'Scala',
+            'Python',
+            'Java',
+            'Kotlin',
+            'Elixir'
+            ].filter(item => item.toLowerCase().includes(this.input.toLowerCase()))
+          },
+          deep: true,
+          immediate: true
+        }
+      },
+      created() {
+        // this.handleSearch()
       },
       methods: {
         setVal() {
           vm.fullName = ["迈克","尔杰克逊"]
+        },
+
+        handleSearch() {
+          console.log(110);
+          this.languages = [
+          'JavaScript',
+          'Ruby',
+          'Scala',
+          'Python',
+          'Java',
+          'Kotlin',
+          'Elixir'
+          ].filter(item => 
+            // 字符串方法 includes 字符串内是否包含指定的子字符串
+            item.toLowerCase().includes(this.input.toLowerCase())
+            // item.includes(this.input)
+          )
         },
       },
     })
