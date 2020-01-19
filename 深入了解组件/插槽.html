@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>插槽</title>
+  <style>
+    .foot,.head {
+      width: 500px;
+      background-color:pink;
+    }
+    button {
+      width: 200px;
+      height: 50px;
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      background-image: linear-gradient(46deg, #FB803A 0%, red 100%);
+      box-shadow: -0.02px 0.1rem 0.2rem rgba(241, 150, 27, 0.23);
+   }
+   .btn {
+      margin: 20px auto;
+   }
+   .container{
+      padding: 10px;
+      border: 1px solid #f40;
+      border-radius: 2px;
+   }
+   .render-slot {
+      width: 200px;
+      height: 100px;
+      border: 1px solid #0f0;
+      border-radius: 5px;
+   }
+   .user {
+     /* background-color: #7FFFD4;
+     background-color: #F5F5DC; */
+     background-color: #8FBC8F;
+   }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1>{{msg}}</h1>
+    <head-diy>{{msg}}</head-diy>
+    <submit-button>Save</submit-button>
+    <footer-diy>底部的描述</footer-diy>
+    <!-- 父组件通过在 template 上使用 v-slot:[name] 指令的方式 把内容填充到对应name的子组件中去 -->
+    <child>
+      <template v-slot:slotname1>
+        <span>我是父组件 我往子组件内填充了一个头部信息</span>
+      </template>
+      <template v-slot:slotname2>
+        <span>我是父组件 我往子组件内填充了一个尾部信息</span>
+      </template>
+      <!-- 2.6版本前的老语法 -->
+      <!-- <span slot="slotname2">我是父组件 我往子组件内填充了一个尾部信息</span> -->
+    </child>
+    <current-user>
+      <template v-slot:default='slotProps'>
+        <!-- <h1>{{slotProps.user.firstName}}</h1> -->
+      </template>
+    </current-user>
+    <!-- 上述写法等价于 -->
+    <!-- 就像假定未指明的内容对应默认插槽一样，不带参数的 v-slot 被假定对应默认插槽： -->
+    <!-- <current-user v-slot:default='slotProps'> -->
+    <current-user v-slot='slotProps'>
+      <!-- <h1>{{slotProps.user.firstName}}</h1> -->
+    </current-user>
+    <!-- 解构 -->
+    <current-user v-slot="{user}">
+      <h1>{{user.firstName}}</h1>
+    </current-user>
+    
+  </div>
+  
+  <!-- 生产环境版本，优化了尺寸和速度 -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+  <script src="https://unpkg.com/vue"></script>
+
+  <script>
+  const vm = new Vue({
+    el: "#app",
+    data: {
+      msg: '石老师的插槽',
+    },
+    methods: {
+      
+    },
+    // 定义局部组件
+    components: {
+      'head-diy': {
+        template: `<div class="head"><h2>头部组件</h2><slot></slot></div>`
+      },
+      'submit-button': {
+        template: `<div class="btn"><button><slot>Submit</slot></button></div>`
+      },
+      'footer-diy': {
+        template: `<div class="foot"><h2>底部组件</h2><slot></slot></div>`,
+      },
+      // 具名插槽 子组件内设置了两个带有名字的插槽
+      'child': {
+        template: 
+          `<div class="container">
+            <div class="header">
+              <p>我是页面标题或者具体的内容</p>
+              <div class="render-slot">
+                <slot name="slotname1"></slot>
+              </div>
+            </div>
+            <div class="footer">
+              <p>我是页尾标题或者具体的内容</p>
+              <div class="render-slot">
+                <slot name="slotname2"></slot>
+              </div>
+            </div>
+          </div>`
+      },
+      'current-user': {
+        data() {
+          return {
+            user: {
+              firstName: '爱心觉罗',
+              secondName: '唐'
+            }
+          }
+        },
+        template: 
+          `<div class="user">
+            <h2><slot :user="user">{{user.secondName}}</slot></h2>
+          </div>`,
+      }
+    }
+  })
+  // 参考链接： https://www.cnblogs.com/mandy-dyf/p/11528505.html
+  </script>
+</body>
+</html>
