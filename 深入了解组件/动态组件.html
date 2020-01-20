@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .container{
+      width: 500px;
+      height: 500px;
+      margin: 0 auto;
+      padding: 10px;
+      border: 1px solid #f40;
+      border-radius: 2px;
+      background-color: #7FFFD4;
+    }
+    button {
+      width: 200px;
+      height: 50px;
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      background-image: linear-gradient(46deg, #FB803A 0%, red 100%);
+      box-shadow: -0.02px 0.1rem 0.2rem rgba(241, 150, 27, 0.23);
+   }
+   .inner {
+     border: 3px solid red;
+     padding: 10px;
+     background-color: pink;
+   }
+
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="container">
+      <button @click="changeComp">点击切换组件</button>
+      <keep-alive>
+        <component :is="showComp"></comp>
+      </keep-alive>
+      <button @click="toggle">异步组件</button>
+      <template v-if='show'>
+        <div class="inner">
+          <later-one></later-one>
+          <later-two></later-two>
+        </div>
+      </template>
+    </div>
+  </div>
+  <!-- 生产环境版本，优化了尺寸和速度 -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+  <script src="https://unpkg.com/vue"></script>
+
+  <script>
+    Vue.component('later-one', {
+      template: `<h2>过一会加载我111</h2>`
+    });
+    Vue.component('later-two', {
+      template: `<h2>过一会加载我222</h2>`
+    });
+    const vm = new Vue({
+      el: '#app',
+      data: {
+        showComp: 'firstPage',
+        show: false,
+      },
+      components: {
+        'firstPage': {
+          data() {
+            return {
+              showColor: '#F5F5DC',
+            }
+          },
+          template: `<div :style="{backgroundColor:showColor,width:'60px',height:'60px',borderRadius:'5px'}" @click="changeColor">第一个组件</div>`,
+          methods: {
+            changeColor() {
+              // 子组件取自己的数据 可以用 this._data
+              if (this.showColor === '#F5F5DC') {
+                this.showColor = 'yellow';
+              } else {
+                this.showColor = '#F5F5DC';
+              }
+            }
+          },
+        },
+
+        'secondPage': {
+          template: `<div :style="{backgroundColor:'#8FBC8F',width:'60px',height:'60px'}">第二个组件</div>`
+        },
+      },
+      methods: {
+        changeComp() {
+          if (this.showComp === 'firstPage') {
+            this.showComp = 'secondPage';
+          } else {
+            this.showComp = 'firstPage'
+          }
+        },
+        toggle() {
+          this.show = !this.show;
+        }
+      },
+    })
+    // 参考链接：1.https://blog.csdn.net/wust_cyl/article/details/82986620 2.https://segmentfault.com/a/1190000012138052
+  </script>
+</body>
+</html>
