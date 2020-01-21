@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>处理边界情况</title>
+</head>
+<body>
+  <div id="app">
+    <h1>{{msg}}</h1>
+    <my-comp inline-template>
+      <h2>在父组件中定义子组件渲染的模板内容</h2>
+    </my-comp>
+  </div>
+  <!-- 生产环境版本，优化了尺寸和速度 -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+  <script src="https://unpkg.com/vue"></script>
+
+  <script>
+    const vm = new Vue({
+      el: '#app',
+      data: {
+        msg: '石老师的处理边界情况'
+      },
+      components: {
+        'my-comp': {
+          data() {
+            return {
+              childMsg: '很多很多子数据',
+            }
+          },
+          template: `<span>我是子组件，内容是{{childMsg}}</span>`
+        }
+      },
+      methods: {
+        
+      },
+    })
+  
+  
+    // 参考链接： https://www.jianshu.com/p/39b626f86d7a
+  </script>
+</body>
+</html>
