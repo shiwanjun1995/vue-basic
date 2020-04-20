@@ -1,9 +1,9 @@
 <template>
     <div class="avatar-upload" v-loading="loading">
-        <div class="dazhu-cover" :style="priview">
+        <div class="avatar-cover" :style="priview">
             <i class="el-icon-plus"></i>
         </div>
-        <input class="dazhu-input" type="file" name="file" @change="avatarChange"/>
+        <input class="avatar-input" type="file" name="file" @change="avatarChange"/>
     </div>
 </template>
 
@@ -43,6 +43,19 @@ export default {
         avatarChange(e) {
             this.loading = true;
             let files = e.target.files;
+            // 文件对应的MIMEType类型 .jpg .jpeg 对应MIMEType类型都为 image/jpeg
+            let regJPGPNG = /\/(jpeg|png)$/;
+            // 只能上传 jpg 和 png 格式的图片 前端直接判断 免去服务器的鸭力
+            let isJPGPNG = regJPGPNG.test(files[0].type);
+            let isLT1M = files[0].size / 1024 / 1024 < 1;
+            if (!isJPGPNG) {
+                this.$warning("上传图片格式只能是 JPG、PNG 格式!");
+                return false;
+            };
+            if (!isLT1M) {
+                this.$warning("上传图片大小不能超过 1MB!");
+                return false;
+            };
             // FormData 对象的使用：
             // 1.用一些键值对来模拟一系列表单控件：即把form中所有表单元素的name与value组装成一个queryString
             // 2. 异步上传二进制文件。
@@ -82,7 +95,7 @@ export default {
         box-sizing: border-box; /** 怪异盒模型 */
         position: relative;
     }
-    .dazhu-cover {
+    .avatar-cover {
         position: absolute;
         top: 2px;
         right: 2px;
@@ -98,11 +111,11 @@ export default {
         background-repeat: no-repeat;
         background-size: cover;
     }
-    .dazhu-cover i {
+    .avatar-cover i {
         color: #bbb;
         font-size: 25px;
     }
-    .dazhu-input {
+    .avatar-input {
         position: absolute;
         width: 100%;
         height: 100%;
