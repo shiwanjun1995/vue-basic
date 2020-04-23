@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>过渡&动画</title>
+  <style>
+    .content-box {
+      width: 200px;
+      height: 200px;
+      line-height: 200px;
+      text-align: center;
+      background-color: mediumseagreen;
+    }
+    .fade-enter-active, .fade-leave-active {
+      transition: opacity .5s;
+    }
+    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+      opacity: 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1>{{msg}}</h1>
+    <button @click="checkFade">切换</button>
+    <transition name="fade" mode="in-out">
+      <div class="content-box" v-if="fadeShow">
+        内容
+      </div>
+    </transition>
+  </div>
+  <!-- 生产环境版本，优化了尺寸和速度 -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+  <script src="https://unpkg.com/vue"></script>
+
+  <script>
+    const vm = new Vue({
+      el: '#app',
+      data: {
+        msg: '石老师的过渡&动画',
+        fadeShow: true
+      },
+      methods: {
+        checkFade() {
+          this.fadeShow = !this.fadeShow;
+        }
+      }
+    })
+  </script>
+</body>
+</html>

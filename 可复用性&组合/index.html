@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>可复用性&混合</title>
+</head>
+<body>
+  <div id="app">
+    <h1>{{msg}}</h1>
+    <p>
+      有两个非常相似的组件，他们的基本功能是一样的，但他们之间又存在着足够的差异性。他们可能会公用一部分业务逻辑，但是他们的页面结构又不相同。这个时候就可以使用mixin来让代码复用。（类似于JS库，暴露出来的方法达到函数复用的效果。又区别于JS库，它继承了vue中script所有对象，包括生命周期，data，methods）
+    </p>
+    <input type="text" placeholder="未添加自定义指令">
+    <input type="text" v-dazhufocus placeholder="添加自定义指令 让其自动聚焦">
+    <p>
+      在上面这个案例中，el.focus()不可放在bind函数里，因为指令虽然绑定到了元素上，但元素还没有插入到DOM中也就是元素还在内存中没有被渲染到页面上，这时在内存调用focus方法没有作用，而inserted则表示元素已经加载到网页上了，此时使用focus才是有效的
+    </p>
+    <h2>和js行为有关的操作，最好在inserted中执行，和样式相关的操作都可在bind中执行</h2>
+    <input type="text" placeholder="未添加自定义指令">
+    <input type="text" v-dazhucolor="vVal" placeholder="添加自定义指令 让其边框有颜色">
+    <p>
+      因为是样式，所以不需要元素插入到DOM中，就好像link引入CSS文件时并不关心元素是否加载
+    </p>
+  </div>
+  <!-- 生产环境版本，优化了尺寸和速度 -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+  <script src="https://unpkg.com/vue"></script>
+
+  <script>
+    Vue.directive('dazhufocus', {
+      inserted(el) {
+        el.focus();
+      }
+    })
+    var myMixin = {
+      data: {
+        message: 'hello',
+        msg: '看看以哪个为准',
+      },
+      created() {
+        this.sayHi();
+        console.log('混入对象的钩子被调用')
+      },
+      methods: {
+        sayHi() {
+          console.log('%c⚡⚡⚡⚡⚡⚡','color:pink;font-size:20px;');
+          console.log(110);
+        }
+      }
+    }
+    const vm = new Vue({
+      el: '#app',
+      mixins: [myMixin],
+      data: {
+        msg: '石老师的可复用性&混合',
+        vVal: 10
+      },
+      created() {
+        console.log('%c🐖🐖🐖🐖🐖🐖','color:#008B45;text-shadow:5px 5px 2px #fff, 5px 5px 2px #373E40, 5px 5px 5px #A2B4BA, 5px 5px 10px #82ABBA;font-weight:bolder;font-size:20px');
+        console.log(this.$data);
+      },
+      // 自定义私有指令
+      directives: {
+        dazhucolor: {
+          bind(el,binding) {
+            el.style.borderColor = '#09c';
+            console.log('%c🐖🐖🐖🐖🐖🐖','color:#008B45;text-shadow:5px 5px 2px #fff, 5px 5px 2px #373E40, 5px 5px 5px #A2B4BA, 5px 5px 10px #82ABBA;font-weight:bolder;font-size:20px');
+            console.log(binding);
+          }
+        }
+      },
+      methods: {}
+    })
+  </script>
+</body>
+</html>
