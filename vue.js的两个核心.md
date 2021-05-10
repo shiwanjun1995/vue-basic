@@ -2,7 +2,7 @@
 > vue 是一个提供MVVM数据双向绑定模式的库 专注于UI层面 有两个核心点：数据驱动和组件化系统
 
 ### 数据驱动
-![](D:\Learnfolder\vue相关\vue-basic\images\mvvm.png)
+![mvvm.png](https://www.ipicbed.com/images/2021/05/10/mvvm.png)
 
 >MVVM模型示意图：
 Model 模型 ==> 数据保存 对应的是js对象；
@@ -21,7 +21,7 @@ ViewModel  ==> 在vue中指的是vue实例 充当数据和视图之间通信的�
 这样 我们就完成了数据改变到视图更新的一个自动过程
 
 ### 组件化系统
-![](D:\Learnfolder\vue相关\vue-basic\images\components.png)
+![components.png](https://www.ipicbed.com/images/2021/05/10/components.png)
 
 > 扩展HTML元素 封装可复用性代码 应用界面完全可以看成是一棵组件树
 

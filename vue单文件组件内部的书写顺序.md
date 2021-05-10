@@ -1,5 +1,5 @@
 ## 组件/实例的选项应该有统一的顺序
-![](D:\Learnfolder\vue相关\vue-basic\images\shunxu.jpg)
+![shunxu.png](https://www.ipicbed.com/images/2021/05/10/shunxu.png)
 > 全局感知
 
 * name: 'compName', // 组件的名字
