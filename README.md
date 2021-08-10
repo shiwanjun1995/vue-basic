@@ -1,3 +1,3 @@
 ### vue官网持续同步更新中......
-* vue2.x：https://cn.vuejs.org/v2/guide/
-* vue3.x：https://v3.cn.vuejs.org/guide/introduction.html
+* vue2.x: https://cn.vuejs.org/v2/guide/
+* vue3.x: https://v3.cn.vuejs.org/guide/introduction.html
