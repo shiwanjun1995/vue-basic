@@ -33,3 +33,17 @@ checkbox 和 radio 使用 checked property 和 change 事件；
 select 字段将 value 作为 prop 并将 change 作为事件。
 ```
 
+## 组件基础
+```json
+1、在组件上使用 v-model，vue2.x：为了让它正常工作，这个组件内的 <input> 必须：
+将其 value attribute 绑定到一个名叫 value 的 prop 上
+在其 input 事件被触发时，将新的值通过自定义的 input 事件抛出
+2、在组件上使用 v-model，vue3.x：为了让它正常工作，这个组件内的 <input> 必须：
+将其 value attribute 绑定到一个名叫 modelValue 的 prop 上
+在其 input 事件被触发时，将新的值通过自定义的 update:modelValue 事件抛出 [Vue 3 建议对组件中所有发出的事件 emit 进行记录 emits 。如果你声明了 emits 选项，并且发送的事件没有被 emits 记录，则会收到一个警告：9vue@next.js:8280 [Vue warn]: Component emitted event "update:modelValue" but it is neither declared in the emits option nor as an "onUpdate:modelValue" prop.]
+3、历史版本迭代解决了什么问题？
+* 3.1、Vue 在 2.2.0 的版本中新增了 自定义组件的 v-model；
+* 3.2、Vue 在 2.3.0 中新增了 .sync 修饰符，在功能上 sync 更像是 自定义组件的 v-model 的增强；【v-model在一个组件中只能使用一次，而.sync修饰符可以使用多次】
+* 3.3、Vue 在 3.x 的版本中对自定义组件的 v-model 作了进一步的增强。【v-model在一个组件中可以使用多次，且事件是自定义的不一定是input事件】
+```
+
