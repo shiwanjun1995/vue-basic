@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>表单输入绑定</title>
+</head>
+<body>
+
+    <div id="form">
+        <section>
+          <h3>1、input</h3>
+          <input type="text" v-model="inputVal" />
+          <p>上面输入的值是{{ inputVal }}</p>
+          <!-- 上面的代码会被编译成 -->
+          <!-- <input type="text" :value="inputVal" @input="inputEvent($event.target.value)"> -->
+          <input type="text" :value="inputVal" @input="e => inputVal = e.target.value">
+        </section>
+        <section>
+          <h3>2、checkbox</h3>
+          <input type="checkbox" id="checkboxID" v-model="checkedVal" />
+          <label for="checkboxID">{{ checkedVal }}</label>
+          <p>上面勾选的值是{{ checkedVal }}</p>
+          <!-- 上面的代码会被编译成 -->
+          <!-- <input type="checkbox" id="checkboxID2" :checked="checkedVal" @change="changeCheckbox($event)"> -->
+          <input type="checkbox" id="checkboxID2" :checked="checkedVal" @change="e => checkedVal = e.target.checked">
+          <label for="checkboxID2">{{ checkedVal }}</label>
+        </section>
+        <section>
+          <h3>3、select</h3>
+          <select v-model="selectVal">
+            <option value="">请选择</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+          <p>上面选中的值是{{ selectVal }}</p>
+          <!-- 上面的代码会被编译成 -->
+          <!-- <select :value="selectVal" @change="changeSelect($event)"> -->
+          <select :value="selectVal" @change="e => selectVal = e.target.value">
+            <option value="">请选择</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+        </section>
+    </div>
+
+    <!-- 最新版本 -->
+    <!-- <script src="https://unpkg.com/vue@next"></script> -->
+    <script src="../vue@next.js"></script>
+    <script>
+        const From = {
+            data() {
+                return {
+                  inputVal: '',
+                  checkedVal: false,
+                  selectVal: '',
+                }
+            },
+            methods: {
+              inputEvent(v) {
+                console.log(v);
+              },
+              changeCheckbox(e) {
+                console.log(e);
+                console.log(e.target.checked);
+                // this.checkedVal = e.target.checked;
+              },
+              changeSelect(e) {
+                console.log(e);
+                console.log(e.target.value);
+                // this.selectVal = e.target.value;
+              },
+            },
+        }
+        // 创建一个应用实例，提供了一个应用上下文，应用实例挂载的整个组件树共享的相同的上下文
+        // 该上下文提供了之前在 Vue 2.x 中“全局”的配置。由于返回应用实例本身，可以链式调用其它方法
+        Vue.createApp(From)
+            .mount('#form')
+    </script>
+</body>
+</html>

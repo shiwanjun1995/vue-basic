@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue-start</title>
+</head>
+<body>
+
+    <div id="counter">
+        Counter: {{ counter }}
+    </div>
+
+    <!-- 最新版本 -->
+    <!-- <script src="https://unpkg.com/vue@next"></script> -->
+    <script src="../vue@next.js"></script>
+    <script>
+        const Counter = {
+            data() {
+                return {
+                    counter: 0,
+                }
+            },
+            mounted() {
+                setInterval(() => {
+                    this.counter++
+                    // console.log(Vue.createApp(Counter).mount('#counter').counter);
+                }, 1000)
+            }
+        }
+        // 创建一个应用实例，提供了一个应用上下文，应用实例挂载的整个组件树共享的相同的上下文
+        // 该上下文提供了之前在 Vue 2.x 中“全局”的配置。由于返回应用实例本身，可以链式调用其它方法
+        Vue.createApp(Counter)
+            .mount('#counter')
+    </script>
+</body>
+</html>
