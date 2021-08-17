@@ -46,4 +46,3 @@ select 字段将 value 作为 prop 并将 change 作为事件。
 * 3.2、Vue 在 2.3.0 中新增了 .sync 修饰符，在功能上 sync 更像是 自定义组件的 v-model 的增强；【v-model在一个组件中只能使用一次，而.sync修饰符可以使用多次】
 * 3.3、Vue 在 3.x 的版本中对自定义组件的 v-model 作了进一步的增强。【v-model在一个组件中可以使用多次，且事件是自定义的不一定是input事件】
 ```
-
