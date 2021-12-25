@@ -19,25 +19,36 @@
         <div v-else>
             Now you don't
         </div>
+        <h1>{{ a }}</h1>
+        <!-- <h1>{{ aa }}</h1> -->
+        <h1 v-if="someObj.c">{{ someObj.c }}</h1>
     </div>
 
   <!-- 生产环境版本，优化了尺寸和速度 -->
   <script src="https://cdn.jsdelivr.net/npm/vue"></script>
   <script>
-      const vm = new Vue({
-          el: "#app",
-          data: {
-            msg: '石老师的条件渲染',
-           
-          },
-          computed: {
-          },
-          methods: {
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                msg: '石老师的条件渲染',
+                // `vm.a` 是响应式的
+                a: 1,
+                someObj: {}
+            },
+            created() {
+                // 对于已经创建的实例，Vue 不允许动态添加根级别的响应式 property。
+                // this.$set(this.data, 'aa', 11) // 这个是错误的
+                // 嵌套对象添加响应式 property
+                this.$set(this.someObj, 'c', 3)
+            },
+            computed: {
+            },
+            methods: {
 
-          },
-      })
-  
-  
+            },
+        })
+        vm.b = 2
+        // `vm.b` 是非响应式的
   </script>
 </body>
 </html>
