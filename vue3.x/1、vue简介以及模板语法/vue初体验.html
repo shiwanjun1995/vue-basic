@@ -23,6 +23,8 @@
                 }
             },
             mounted() {
+                console.log(this);
+                // 生命周期钩子的 this 上下文指向调用它的当前活动实例
                 setInterval(() => {
                     this.counter++
                     // console.log(Vue.createApp(Counter).mount('#counter').counter);
