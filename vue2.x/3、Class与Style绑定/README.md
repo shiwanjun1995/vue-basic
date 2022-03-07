@@ -13,6 +13,9 @@
 数组语法：
 <div v-bind:class="[activeClass, errorClass]"></div>
 把一个数组传给 v-bind:class 以应用一个class列表 且数组语法中也可以使用对象语法
+
+当有多个条件时 class 时，可以通过设置一个默认的类名放在最后。
+<div v-bind:class="[{ active: 'activeClass' }, defaultClass]">
 ```
 
 ## 绑定内联样式
