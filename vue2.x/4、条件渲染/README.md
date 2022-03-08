@@ -5,11 +5,12 @@ v-else 元素必须紧跟在带 v-if 或者 v-else-if 的元素的后面，否�
 
 vue会尽可能高效地渲染元素 通常会复用已有元素而不是从头开始渲染 这样vue变得非常之快 另外vue提供了一种方式来表明‘这；两个元素是完全独立的 不要复用他们’ 只需添加一个具有唯一值的 key 属性即可：
 
-## 添加key的原因是？？
+## 添加key的原因是？
 由于vue的具有就地复用原则 在渲染元素的时候 相同的就会复用 不同的就会在当前不同的位置插入 这样大大提升了性能
 
 v-show 另一个用于根据条件展示元素的选项是 v-show 指令 不同的是带有 v-show 的元素始终会被渲染并保留在 DOM 中。v-show 只是简单地切换元素的 CSS 属性 display v-show 不支持 <template> 元素，也不支持 v-else
 
+## v-if 和 v-show 的区别？
 两者区别：
 * 手段：v-if是动态的向DOM树内添加或者删除DOM元素；v-show是通过设置DOM元素的display样式属性控制显隐； 
 * 编译过程：v-if切换有一个局部编译/卸载的过程，切换过程中合适地销毁和重建内部的事件监听和子组件；v-show只是简单的基于css切换；
@@ -19,3 +20,13 @@ v-show 另一个用于根据条件展示元素的选项是 v-show 指令 不同�
 
 小tips: 当 v-if 与 v-for 一起使用时，v-for 具有比 v-if 更高的优先级。请查阅列表渲染指南 以获取详细信息。
 链接地址：https://cn.vuejs.org/v2/style-guide/#%E9%81%BF%E5%85%8D-v-if-%E5%92%8C-v-for-%E7%94%A8%E5%9C%A8%E4%B8%80%E8%B5%B7-%E5%BF%85%E8%A6%81
+
+## v-if 和 v-show 与 display:none 的关系？
+* v-if       会让 dom 节点全部消失。                 （视觉上看不到，不会占据位置，没有dom节点）
+* v-show     调用 display:none 来控制元素的显示与隐藏。（视觉上看不到，不会占据位置， 有dom节点）
+* visibility 设置 hidden 来隐藏元素。                （视觉上看不到，  会占据位置， 有dom节点）
+
+display:none是个相当惨无人道的声明，子孙后代全部搞死（株连性），而且连块安葬的地方都不留（不留空间），导致全体民众哗然（渲染与回流）。
+visibility:hidden则具有人道***关怀，虽然不得已搞死子孙，但是子孙可以通过一定手段避免（伪株连性），而且死后全尸，墓地俱全（占据空间），国内民众比较淡然（无渲染与回流）。
+
+参考链接：https://www.nowcoder.com/questionTerminal/dce13fd5b59c41be80a22b38c5a32dc1
