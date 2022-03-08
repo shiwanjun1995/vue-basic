@@ -46,6 +46,22 @@ example1.items = example1.items.filter(function (item) {
 </ul>
 ```
 
+## 在组件上使用 v-for
+```html
+在自定义组件上，你可以像在任何普通元素上一样使用 v-for。
+<my-component v-for="item in items" :key="item.id"></my-component>
+
+然而，任何数据都不会被自动传递到组件里，因为组件有自己独立的作用域。为了把迭代数据传递到组件里，我们要使用 prop：
+<my-component
+  v-for="(item, index) in items"
+  v-bind:item="item"
+  v-bind:index="index"
+  v-bind:key="item.id"
+></my-component>
+
+不自动将 item 注入到组件里的原因是，这会使得组件与 v-for 的运作紧密耦合。明确组件数据的来源能够使组件在其他场合重复使用。
+```
+
 ## vue中DOM更新是异步的 
 将数据修改之后，DOM并没有即时更新，而是等到vue下一次的渲染工作执行的时候，才会更新DOM 什么时候进行下一次渲染？比如页面数据发生改变的时候
 ```js
