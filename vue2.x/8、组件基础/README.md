@@ -137,3 +137,26 @@ components: {
 * 另外是写一个事件名 this.$emit(事件名称, 参数) 这个是用来触发事件的！
 
 参考链接：1.https://www.jianshu.com/p/d0cc6eb0226e 2.https://www.cnblogs.com/xiaohuochai/p/7388866.html
+
+# 解析 DOM 模板时的注意事项
+
+## 大小写不敏感
+另外，HTML attribute 名不区分大小写，因此浏览器将所有大写字符解释为小写。这意味着当你在 DOM 模板中使用时，驼峰 prop 名称和 event 处理器参数需要使用它们的 kebab-cased (横线字符分隔) 等效值：
+
+```js
+//  在 JavaScript 中是驼峰式
+
+app.component('blog-post', {
+  props: ['postTitle'],
+  emits: ['enlargeText'],
+  template: `
+    <h3>{{ postTitle }}</h3>
+  `
+})
+```
+
+```html
+<!-- 在 HTML 中则是横线字符分割 -->
+<blog-post post-title="hello!" @enlarge-text="enlargeText"></blog-post>
+```
+
