@@ -11,6 +11,27 @@ v-model 在内部为不同的输入元素使用不同的属性并抛出不同的
   
 注意：在文本区域插值 (<textarea>{{text}}</textarea>) 并不会生效，请使用 v-model 来代替。
 
+# 值绑定
+```html
+对于单选按钮，复选框及选择框的选项，v-model 绑定的值通常是静态字符串 (对于复选框也可以是布尔值)：
+<!-- 当选中时，`picked` 为字符串 "a" -->
+<input type="radio" v-model="picked" value="a" />
+
+<!-- `toggle` 为 true 或 false -->
+<input type="checkbox" v-model="toggle" />
+
+<!-- 当选中第一个选项时，`selected` 为字符串 "abc" -->
+<select v-model="selected">
+  <option value="abc">ABC</option>
+</select>
+
+但是有时我们可能想把值绑定到当前活动实例的一个动态 property 上，这时可以用 v-bind 实现，此外，使用 v-bind 可以将输入值绑定到非字符串。
+<input type="radio" v-model="pick" v-bind:value="a" />
+
+// 当选中时
+vm.pick === vm.a
+```
+
 # 修饰符
 在默认情况下，v-model 在每次 input 事件触发后将输入框的值与数据进行同步 
 ```html
