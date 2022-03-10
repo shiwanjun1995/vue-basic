@@ -14,8 +14,18 @@
             background-image: linear-gradient(46deg, #FB803A 0%, red 100%);
             box-shadow: -0.02px 0.1rem 0.2rem rgba(241, 150, 27, 0.23);
         }
+        .colorful {
+            color: aqua;
+        }
         .colorRed {
             color: red;
+        }
+        #app-one,
+        #app-two,
+        #app-three,
+        #app-four {
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -26,12 +36,17 @@
         当使用短横线定义的组件的时候 也必须在引用这个自定义组件的时候使用短横线
         <colorful-button></colorful-button>
         <my-component-a></my-component-a>
+        <!-- kebab-case 命名的组件在dom中使用是无效的 -->
         <!-- <myComponentA></myComponentA> -->
+        <!-- PascalCase 命名的组件在dom中使用是无效的 -->
+        <!-- <MyComponentA></MyComponentA> -->
     </div>
 
     <div id="app-two">
         <h1>{{ msgb }}}</h1>
-        <MyComponentB></MyComponentB>
+        <my-component-b></my-component-b>
+        <!-- PascalCase 命名的组件在dom中使用是无效的 -->
+        <!-- <MyComponentB></MyComponentB> -->
     </div>
 
     <div id="app-three">
@@ -52,9 +67,10 @@
         <test-not-prop class="colorRed" my-self-define></test-not-prop>
     </div>
 
-  <!-- 生产环境版本，优化了尺寸和速度 -->
-  <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
-  <script src="https://unpkg.com/vue"></script>
+    <!-- 生产环境版本，优化了尺寸和速度 -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script> -->
+    <script src="https://unpkg.com/vue@2.6.14/dist/vue.js"></script>
+    
     <script>
         // 全局注册就是在构造器的外部用Vue.component来注册。
         /* 这里写的是注册的组件 */
@@ -69,13 +85,13 @@
         // 注意，尽管如此，直接在 DOM (即非字符串的模板) 中使用时只有 kebab-case 是有效的。
         Vue.component('MyComponentA',{
             template: `
-                <span>这边是自定义的彩色块</span>
+                <span class="colorful">这边是自定义的彩色块</span>
             `
         })
 
         Vue.component('MyComponentB',{
             template: `
-                <span>这边是自定义的彩色块</span>
+                <span class="colorful">这边是自定义的彩色块</span>
             `
         })
 
@@ -86,11 +102,11 @@
         // })
 
         Vue.component('blog-post', {
-          props: ['title'],
-          template: '<h3>{{title}}</h3>'
+            props: ['title'],
+            template: '<h3>{{title}}</h3>'
         })
 
-      Vue.component('component-d', {
+        Vue.component('component-d', {
             props: {
                 // 基础的类型检查 (`null` 和 `undefined` 会通过任何类型验证)
                 propA: Number,
@@ -160,7 +176,7 @@
 
         const vm2 = new Vue({
             el: '#app-two',
-            template: '<MyComponentB></MyComponentB>',
+            // template: '<MyComponentB></MyComponentB>',
             data: {
                 msgb: '石老师的组件注册-字符串模板',
             }
@@ -218,7 +234,7 @@
                 }
             }
         })
-    
+
     </script>
 </body>
 </html>
