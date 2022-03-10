@@ -3,6 +3,15 @@
 * Vue的组件里面也可以有data、template、methods、watch等属性，需要注意的是component中的data必须为一个函数 每个组件有自己独立的数据 对象拷贝问题
 * 组件注册分为全局注册、局部注册 全局注册意味着即便你已经不再使用一个组件了，它仍然会被包含在你最终的构建结果中。这造成了用户下载的 JavaScript 的无谓的增加。
 
+# 组件名大小写
+## 在字符串模板或单文件组件中定义组件时，定义组件名的方式有两种：
+* kebab-case 短横线连接起来的方式（当使用 kebab-case (短横线分隔命名) 定义一个组件时，你在引用这个自定义元素时也必须使用 kebab-case，例如 <my-component-name>。）
+* PascalCase 首字母大写 （当使用 PascalCase (首字母大写命名) 定义一个组件时，你在引用这个自定义元素时两种命名法都可以使用。也就是说 <my-component-name> 和 <MyComponentName> 都是可接受的。）
+
+## 直接在 DOM (即非字符串的模板) 中使用时：
+* 只有 kebab-case 是有效的。
+
+
 # 在模块系统中引入组件
 注意在 ES2015+ 中，在对象中放一个类似 ComponentA 的变量名其实是 ComponentA: ComponentA 的缩写，即这个变量名同时是：
 * 用在模板中的自定义元素的名称
