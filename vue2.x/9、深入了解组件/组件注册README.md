@@ -44,6 +44,15 @@ props: {
 简单实例中我们传入的值都是字符串类型的，但实际上任何类型的值都可以传给一个 prop。
 可传入一个数字 v-bind:绑定、可传入布尔值、数组、对象、对象的所有属性 [都是通过v-bind:来传递来告诉vue这是一个js表达式]
 
+## 传入一个布尔值
+<!-- 包含该 prop 没有值的情况在内，都意味着 `true`。          -->
+<!-- 如果没有在 props 中把 is-published 的类型设置为 Boolean，
+则这里的值为空字符串，而不是“true”。 -->
+
+<blog-post is-published></blog-post>
+
+此处的 prop (is-published) 为true，前提是在自组件内部设定该 porp 为布尔值.比如经常在按钮组件设置 disabled 即可，<my-button disabled></my-button>，不需要设置 <my-button :disabled="true"></my-button>
+
 # Prop 验证
 我们可以为组件的 prop 指定验证要求，例如你知道的这些类型。如果有一个需求没有被满足，则 Vue 会在浏览器控制台中警告你。这在开发一个会被别人用到的组件时尤其有帮助。
 为了定制 prop 的验证方式，你可以为 props 中的值提供一个带有验证需求的对象，而不是一个字符串数组。例如：
