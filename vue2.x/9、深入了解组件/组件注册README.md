@@ -59,6 +59,38 @@ props: {
 当 prop 验证失败的时候，(开发环境构建版本的) Vue 将会产生一个控制台的警告。
 注意那些 prop 会在一个组件实例创建之前进行验证，所以实例的属性 (如 data、computed 等) 在 default 或 validator 函数中是不可用的。
 
+# 非 Prop 的 Attribute
+一个非 prop 的 attribute 是指传向一个组件，但是该组件并没有相应 props 或 emits 定义的 attribute。常见的示例包括 class、style 和 id attribute。可以通过 $attrs property 访问那些 attribute。
+
+
+## Attribute 继承
+当组件返回单个根节点时，非 prop 的 attribute 将自动添加到根节点的 attribute 中。例如，在 date-picker 组件的实例中：
+```js
+app.component('date-picker', {
+  template: `
+    <div class="date-picker">
+      <input type="datetime-local" />
+    </div>
+  `
+})
+```
+
+如果我们需要通过 data-status attribute 定义 <date-picker> 组件的状态，它将应用于根节点 (即 div.date-picker)。
+
+<!-- 具有非 prop 的 attribute 的 date-picker 组件-->
+<date-picker data-status="activated"></date-picker>
+
+<!-- 渲染后的 date-picker 组件 -->
+<div class="date-picker" data-status="activated">
+  <input type="datetime-local" />
+</div>
+
+## 禁用 Attribute 继承
+如果你不希望组件的根元素继承 attribute，可以在组件的选项中设置 inheritAttrs: false。
+
+禁用 attribute 继承的常见场景是需要将 attribute 应用于根节点之外的其他元素。
+
+对于绝大多数特性来说，从外部提供给组件的值会替换掉组件内部设置好的值。所以如果传入 type="text" 就会替换掉 type="date" 并把它破坏！庆幸的是，class 和 style 特性会稍微智能一些，即两边的值会被合并起来。
 
 ## 总结
 1.prop 数据单项传递，父影响子，子不影响父
