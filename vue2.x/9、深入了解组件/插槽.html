@@ -126,9 +126,10 @@
             }
           }
         },
+        // 要使 user 在父级提供的插槽内容上可用，我们可以添加一个 <slot> 元素并将其作为一个 attribute 绑定：
         template: 
           `<div class="user">
-            <h2><slot :user="user">{{user.secondName}}</slot></h2>
+            <slot :user="user">{{user.secondName}}</slot>
           </div>`,
       }
     }
