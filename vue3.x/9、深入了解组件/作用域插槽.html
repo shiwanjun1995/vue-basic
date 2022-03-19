@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>深入了解组件</title>
+</head>
+<body>
+
+    <div id="todo-list">
+      {{ list }}
+      <!-- 父组件能够访问到自组件才有的内容是很有必要的 -->
+      <!-- 有时让插槽内容能够访问子组件中才有的数据是很有用的。当一个组件被用来渲染一个项目数组时，这是一个常见的情况，我们希望能够自定义每个项目的渲染方式。 -->
+      <!-- <todo-list v-slot="slotProps">
+        {{ slotProps }}
+      </todo-list> -->
+      <!-- <todo-list v-slot:default="slotProps">
+        <p>
+          <b>{{ slotProps }}</b>&nbsp;
+          <strong>{{ slotProps.index }}</strong>&nbsp;
+          <span style="color:green;">{{ slotProps.item }}</span>
+        </p>
+      </todo-list> -->
+      <todo-list>
+        <!-- 具名插槽 -->
+        <template v-slot:default="slotProps" >
+          <p style="background-color: aqua;">
+            {{ slotProps }}
+          </p>
+        </template>
+        <template #item="slotProps">
+          <p style="background-color: yellowgreen;">
+            {{ slotProps }}
+          </p>
+        </template>
+        <template #index="slotProps">
+          <p style="background-color: yellow;">
+            {{ slotProps }}
+          </p>
+        </template>
+      </todo-list>
+      <!-- 作用域插槽的内部工作原理：将你的插槽内容放到一个传入了单个参数的函数里面，所以可以解构 -->
+      <!-- function (slotProps) {
+        你的插槽内容
+      } -->
+      <todo-list v-slot:default="{ item }">
+        <span style="color:red;">{{ item }}</span>
+      </todo-list>
+    </div>
+
+    <!-- 最新版本 -->
+    <!-- <script src="https://unpkg.com/vue@next"></script> -->
+    <script src="../vue@next.js"></script>
+    <script>
+        const TodoList = {
+          // 父组件的数据
+          data() {
+            return {
+              list: [1,2,3]
+            }
+          },
+        }
+        // 创建一个应用实例，提供了一个应用上下文，应用实例挂载的整个组件树共享的相同的上下文
+        // 该上下文提供了之前在 Vue 2.x 中“全局”的配置。由于返回应用实例本身，可以链式调用其它方法
+        const app = Vue.createApp(TodoList);
+        console.log(app);
+        // 要使 item 在父级提供的插槽内容上可用，我们可以添加一个 <slot> 元素并将其作为一个 attribute 绑定：
+        app.component('todo-list', {
+          // 子组件的数据
+          data() {
+            return {
+              items: ['Feed a cat', 'Buy milk']
+            }
+          },
+          // template: `
+          //   <div class="todo-list">
+          //     <ul>
+          //       <li v-for="(item, index) in items">
+          //         <slot :index="index" :item="item"></slot>
+          //       </li>
+          //     </ul>
+          //   </div>
+          // `,
+          template: `
+            <div class="todo-list">
+              <ul>
+                <li v-for="(item, index) in items">
+                  <slot :index="index" :item="item"></slot>
+                  <slot :item="item" name="item"></slot>
+                  <slot :index="index" name="index"></slot>
+                </li>
+              </ul>
+            </div>
+          `,
+        })
+        
+        app.mount('#todo-list');
+    </script>
+</body>
+</html>
