@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Provide / Inject</title>
+</style>
+</head>
+<body>
+  <div id="todo-list">
+    <todo-list></todo-list>
+    <todo-list-statistics></todo-list-statistics>
+  </div>
+  <!-- 最新版本 -->
+  <!-- <script src="https://unpkg.com/vue@next"></script> -->
+  <script src="../vue@next.js"></script>
+
+  <script>
+  
+  const TodoList = {
+    data() {
+      return {
+        todos: ['Feed a cat', 'Buy tickets']
+      }
+    },
+    template: `
+      <div>
+        {{ todos.length }}
+        <!-- 模板的其余部分 -->
+      </div>
+    `,
+  };
+  const TodoListStatistics = {
+    inject: ['user'],
+    template: `
+      <h1>{{ user }}</h1>
+    `,
+    created() {
+      console.log(`Injected property: ${this.user}`) // > 注入的 property: John Doe
+    }
+  };
+  // 创建一个应用实例，提供了一个应用上下文，应用实例挂载的整个组件树共享的相同的上下文
+  // 该上下文提供了之前在 Vue 2.x 中“全局”的配置。由于返回应用实例本身，可以链式调用其它方法
+  const app = Vue.createApp({
+    provide: {
+      user: 'John Doe'
+    },
+    components: {
+      'todo-list': TodoList,
+      'todo-list-statistics': TodoListStatistics,
+    }
+  });
+  // 注意局部注册的组件在其子组件中不可用。例如，如果你希望 ComponentA 在 ComponentB 中可用，则你需要这样写：
+  // const ComponentA = {
+  //   /* ... */
+  // }
+
+  // const ComponentB = {
+  //   components: {
+  //     'component-a': ComponentA
+  //   }
+  //   // ...
+  // }
+  // console.log(app);
+  app.component('todo-list', )
+  
+  app.mount('#todo-list');
+  </script>
+</body>
+</html>
