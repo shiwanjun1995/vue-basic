@@ -5,24 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>可复用&组合</title>
+    <style>
+        .box {
+            width: 100px;
+            max-height: 100px;
+            border: 1px solid #ccc;
+            overflow-y: scroll;
+        }
+    </style>
 </head>
 <body>
 
-    <div id="counter">
-        Counter: {{ counter }}
+    <div id="select">
+        <div class="box" v-load>
+            <p>akjdlsjalfjsaldjlfjflsjfljfsljfljsfl</p>
+            <p>akjdlsjalfjsaldjlfjflsjfljfsljfljsfl</p>
+            <p>akjdlsjalfjsaldjlfjflsjfljfsljfljsfl</p>
+            <p>akjdlsjalfjsaldjlfjflsjfljfsljfljsfl</p>
+            <p>akjdlsjalfjsaldjlfjflsjfljfsljfljsfl</p>
+            <p>akjdlsjalfjsaldjlfjflsjfljfsljfljsfl</p>
+        </div>
     </div>
 
     <!-- 最新版本 -->
     <!-- <script src="https://unpkg.com/vue@next"></script> -->
-    <script src="../vue@next.js" type="module"></script>
-    <script type="module">
-        import { ref } from '../vue@next.js';
-        const Counter = ref(0);
-        console.log(Counter);
+    <script src="../vue@next.js"></script>
+    <script>
         // 创建一个应用实例，提供了一个应用上下文，应用实例挂载的整个组件树共享的相同的上下文
         // 该上下文提供了之前在 Vue 2.x 中“全局”的配置。由于返回应用实例本身，可以链式调用其它方法
-        Vue.createApp(Counter)
-            .mount('#counter')
+        const app = Vue.createApp({})
+        // 第一个参数为自定义插件名称
+        app.directive('load', {
+            mounted(el, binding) {
+                console.log(el, binding);
+                // 这个代码是在box里写了很多p标签然后溢出,给box设置overflow:scroll;然后在box里滚动条滚动时就会输出
+                el.addEventListener('scroll', (e) => {
+                    // scrollHeight属性表示元素的内容高度
+                    // scrollTop属性表示元素纵向滚动偏移量
+                    // clientHeight 属性是一个只读属性，它返回该元素的像素高度，高度包含内边距（padding），不包含边框（border），外边距（margin）和滚动条，是一个整数，单位是像素 px。
+                    const { scrollHeight, scrollTop, clientHeight } = e.target;
+                    console.log(scrollHeight, scrollTop, clientHeight);
+                    if (scrollHeight - scrollTop === clientHeight) {
+                        alert("滚动到底部了，请求加载下一页")
+                    }
+                }, true)
+            },
+        })
+        app.mount('#select')
     </script>
 </body>
 </html>
