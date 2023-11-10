@@ -10790,6 +10790,7 @@ var Vue = (function (exports) {
   const hydrate = ((...args) => {
       ensureHydrationRenderer().hydrate(...args);
   });
+  // createApp 的对象实际上是一个组件，每个应用都需要一个“根组件”，其他组件将作为其子组件
   const createApp = ((...args) => {
       const app = ensureRenderer().createApp(...args);
       {
@@ -10797,6 +10798,7 @@ var Vue = (function (exports) {
           injectCompilerOptionsCheck(app);
       }
       const { mount } = app;
+      // 该方法应该始终在整个应用配置和资源注册完成后被调用。
       app.mount = (containerOrSelector) => {
           const container = normalizeContainer(containerOrSelector);
           if (!container)
@@ -10807,6 +10809,8 @@ var Vue = (function (exports) {
               // Reason: potential execution of JS expressions in in-DOM template.
               // The user must make sure the in-DOM template is trusted. If it's
               // rendered by the server, the template should not contain any user data.
+
+              // 将根组件的模板渲染到指定的容器中。
               component.template = container.innerHTML;
           }
           // clear content before mounting
@@ -10816,6 +10820,7 @@ var Vue = (function (exports) {
               container.removeAttribute('v-cloak');
               container.setAttribute('data-v-app', '');
           }
+          // 不同于其他资源注册方法，它的返回值是根组件实例而非应用实例。
           return proxy;
       };
       return app;

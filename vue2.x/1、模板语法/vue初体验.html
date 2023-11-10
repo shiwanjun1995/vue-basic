@@ -12,6 +12,7 @@
         {{message}}
         <h1 v-html="htmlvalue"></h1>
         <h2 :title="message">鼠标悬停</h2>
+        <!-- falsy 的假值为：【false、0、-0、0n、''、null、undefined、NaN、document.all】共9个，其余均为 truthy -->
         <button v-bind:disabled="isButtonDisabled">按钮</button>
         <!-- <input type="text" v-bind:[eventName]='event'>
         <button v-bind:click='eventName="change"'>change事件</button>
