@@ -29,7 +29,7 @@ Mixin 很容易发生冲突：因为每个 mixin 的 property 都被合并到同
 
 ## 2、组合式 API 基础
 
-### 2.1、setup 组件选项（组合式API的使用位置）
+### 2.1、setup 组件选项（组合式API的使用位置）【搭配 <script setup></script> 使用，告诉vue需要在编译时进行一些处理，让我们可以更简洁地使用组合式API，比如其中的导入和顶层变量、函数都能够在模版中直接使用】
 ```json
 1、新的 setup 选项在组件创建之前执行，一旦 props 被解析，就将作为组合式 API 的入口。
 2、在 setup 中你应该避免使用 this，因为它不会找到组件实例。setup 的调用发生在 data property、computed property 或 methods 被解析之前，所以它们无法在 setup 中被获取。
