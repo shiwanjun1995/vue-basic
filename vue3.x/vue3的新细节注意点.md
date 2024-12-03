@@ -1,4 +1,5 @@
 ## 列表渲染
+
 ```json
 1、在 v-for 块中，我们可以访问所有父作用域的 property。
 2、在自定义组件上，你可以像在任何普通元素上一样使用 v-for：
@@ -15,15 +16,20 @@
 ```
 
 ## 事件处理
+
 ```json
 1、事件处理程序中可以有多个方法，这些方法由逗号运算符分隔：
   <!-- 这两个 one() 和 two() 将执行按钮点击事件 -->
   <button @click="one($event), two($event)">
     Submit
   </button>
+2、书写methods中的方法
+  vue2: function dynamicName() {} 关键字有时候太长
+  vue3: const dynamicName = () => {} 这种写法偏函数式风格，箭头函数也能防止this指向错误
 ```
 
 ## 表单输入绑定
+
 ```json
 1、你可以用 v-model 指令在表单 <input>、<textarea> 及 <select> 元素上创建双向数据绑定。它会根据控件类型自动选取正确的方法来更新元素。尽管有些神奇，但 v-model 本质上不过是语法糖。它负责监听用户的输入事件来更新数据，并在某种极端场景下进行一些特殊处理。
 2、v-model 会忽略所有表单元素的 value、checked、selected attribute 的初始值而总是将当前活动实例的数据作为数据来源。你应该通过 JavaScript 在组件的 data 选项中声明初始值。
@@ -34,6 +40,7 @@ select 字段将 value 作为 prop 并将 change 作为事件。
 ```
 
 ## 组件基础
+
 ```json
 1、在组件上使用 v-model，vue2.x：为了让它正常工作，这个组件内的 <input> 必须：
 将其 value attribute 绑定到一个名叫 value 的 prop 上
