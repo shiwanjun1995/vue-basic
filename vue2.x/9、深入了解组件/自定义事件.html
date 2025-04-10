@@ -1,225 +1,226 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>自定义事件</title>
-  <style>
-    button {
-      width: 200px;
-      height: 50px;
-      border: none;
-      border-radius: 10px;
-      color: #fff;
-      background-image: linear-gradient(46deg, #FB803A 0%, red 100%);
-      box-shadow: -0.02px 0.1rem 0.2rem rgba(241, 150, 27, 0.23);
-   }
-   .father {
-     width: 500px;
-     height: 280px;
-     margin-bottom: 20px;
-     text-align: center;
-     border: 1px solid #cfc;
-     background-color: pink;
-   }
-   .colorRed {
-      color: red;
-   }
-</style>
-</head>
-<body>
-  <div id="app">
-    <h1>{{msg}}</h1>
-    <btn-father></btn-father>
-    <child-one @click.native="handleClick"></child-one>
-    <child-two @click="handleClickT"></child-two>
-    <p>{{msgT}}</p>
-    <my-country-one :country="countryname" @set-name="setName"></my-country-one>
-    <!-- 父组件给子组件传递一个函数 子组件通过调用传入的函数来改变父组件的状态 -->
-    <my-country-two :country="ctname" @set-name="(res) => ctname = res"></my-country-two>
-    <!-- 父组件将 country 传给子组件并使用.sync修饰符。 -->
-    <my-country-three :country.sync="ctnamethree"></my-country-three>
-    <!-- <btn-child></btn-child> -->
-    <check-box v-model="lovingVue"></check-box>
-  </div>
-  <!-- 生产环境版本，优化了尺寸和速度 -->
-  <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script> -->
-  <script src="https://unpkg.com/vue@2.6.14/dist/vue.js"></script>
-
-  <script>
-      
-  // Vue.component('btn-child', {
-  //   template: '<button>子组件</button>'
-  // })
-  const vm = new Vue({
-    el: "#app",
-    data: {
-      msg: '石老师的自定义事件',
-      msgT: '在vue的组件通信props中，一般情况下，数据都是单向的 有些情况下，我们可能需要对一个 prop 进行“双向绑定”。不幸的是，真正的双向绑定会带来维护上的问题，因为子组件可以修改父组件，且在父组件和子组件都没有明显的改动来源。',
-      countryname: '安徽安庆',
-      ctname: '安庆宿松',
-      ctnamethree: '宿松许岭',
-      lovingVue: true
-    },
-    methods: {
-      /** 
-        * native 官方解释是 直接监听组件根元素上的原生事件
-      */
-      handleClick () {
-        alert('hello,world!')
-      },
-      // 子组件传递信息的同时携带值，让父组件对值进行处理
-      /** 
-        * vm.$emit( event, arg ) //触发当前实例上的事件 (并可以携带参数过去)
-        * vm.$on( event, fn ) //监听event事件后运行 fn
-      */
-      handleClickT(val) {
-        alert(`收到了来自子组件传递过来的值：${val}`)
-      },
-
-      setName(val) {
-        this.countryname = val;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>自定义事件</title>
+    <style>
+      button {
+        width: 200px;
+        height: 50px;
+        border: none;
+        border-radius: 10px;
+        color: #fff;
+        background-image: linear-gradient(46deg, #fb803a 0%, red 100%);
+        box-shadow: -0.02px 0.1rem 0.2rem rgba(241, 150, 27, 0.23);
       }
-    },
 
-    // 定义局部组件
-    components: {
-      'child-one': {
-        template: `<button>click me</button>`
-      },
-      /**
-        * 补充内容：父组件中绑定的事件默认是自定义事件，所以需要通过子组件$emit去触发，但是原始事件（click等），可以通过@click.native直接触发；
-        * 不使用native修饰符 子组件定义一个事件 去emit 发布携带事件的事件名称
-        * $emit('funA')，emit是动词，意思是发行，发表，在这里可以理解为发布携带的事件funA。子主件使用$emit('funA')发布的事件可以被父组件 v:on  （即@funA='funB'）侦听，随即触发父组件绑定的事件funB。
-       */
-      'child-two': {
-        template: `<button @click="clickEvent">click me Two</button>`,
+      .father {
+        width: 500px;
+        height: 280px;
+        margin-bottom: 20px;
+        text-align: center;
+        border: 1px solid #cfc;
+        background-color: pink;
+      }
+
+      .colorRed {
+        color: red;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app">
+      <h1>{{msg}}</h1>
+      <btn-father></btn-father>
+      <child-one @click.native="handleClick"></child-one>
+      <child-two @click="handleClickT"></child-two>
+      <p>{{msgT}}</p>
+      <my-country-one
+        :country="countryname"
+        @set-name="setName"
+      ></my-country-one>
+      <!-- 父组件给子组件传递一个函数 子组件通过调用传入的函数来改变父组件的状态 -->
+      <my-country-two
+        :country="ctname"
+        @set-name="(res) => ctname = res"
+      ></my-country-two>
+      <!-- 父组件将 country 传给子组件并使用.sync修饰符。 -->
+      <my-country-three :country.sync="ctnamethree"></my-country-three>
+      <!-- <btn-child></btn-child> -->
+      <check-box v-model="lovingVue"></check-box>
+    </div>
+    <!-- 生产环境版本，优化了尺寸和速度 -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script> -->
+    <script src="https://unpkg.com/vue@2.6.14/dist/vue.js"></script>
+
+    <script>
+      // Vue.component('btn-child', {
+      //   template: '<button>子组件</button>'
+      // })
+      const vm = new Vue({
+        el: '#app',
+        data: {
+          msg: '石老师的自定义事件',
+          msgT: '在vue的组件通信props中，一般情况下，数据都是单向的 有些情况下，我们可能需要对一个 prop 进行“双向绑定”。不幸的是，真正的双向绑定会带来维护上的问题，因为子组件可以修改父组件，且在父组件和子组件都没有明显的改动来源。',
+          countryname: '安徽安庆',
+          ctname: '安庆宿松',
+          ctnamethree: '宿松许岭',
+          lovingVue: true,
+        },
         methods: {
-          clickEvent() {
-            // $emit('funA') 是发布了一个事件名为 funA 的事件 这个事件在还没有发布之前就已经被父组件订阅了(@funA='funB') 
-            // 所以 当子组件在把这个事件发布出来的时候 父组件就可以接收到这个已经被订阅了的事件 然后就会触发父组件绑定的 funB 事件
-            this.$emit('click','哈哈哈，我就是这么强大');
-          }
-        }
-      },
-      'my-country-one': {
-        props: ['country'],
-        template: 
-        `<div class="father">
+          /**
+           * native 官方解释是 直接监听组件根元素上的原生事件
+           */
+          handleClick() {
+            alert('hello,world!')
+          },
+          // 子组件传递信息的同时携带值，让父组件对值进行处理
+          /**
+           * vm.$emit( event, arg ) //触发当前实例上的事件 (并可以携带参数过去)
+           * vm.$on( event, fn ) //监听event事件后运行 fn
+           */
+          handleClickT(val) {
+            alert(`收到了来自子组件传递过来的值：${val}`)
+          },
+
+          setName(val) {
+            this.countryname = val
+          },
+        },
+
+        // 定义局部组件
+        components: {
+          'child-one': {
+            template: `<button>click me</button>`,
+          },
+          /**
+           * 补充内容：父组件中绑定的事件默认是自定义事件，所以需要通过子组件$emit去触发，但是原始事件（click等），可以通过@click.native直接触发；
+           * 不使用native修饰符 子组件定义一个事件 去emit 发布携带事件的事件名称
+           * $emit('funA')，emit是动词，意思是发行，发表，在这里可以理解为发布携带的事件funA。子主件使用$emit('funA')发布的事件可以被父组件 v:on  （即@funA='funB'）侦听，随即触发父组件绑定的事件funB。
+           */
+          'child-two': {
+            template: `<button @click="clickEvent">click me Two</button>`,
+            methods: {
+              clickEvent() {
+                // $emit('funA') 是发布了一个事件名为 funA 的事件 这个事件在还没有发布之前就已经被父组件订阅了(@funA='funB')
+                // 所以 当子组件在把这个事件发布出来的时候 父组件就可以接收到这个已经被订阅了的事件 然后就会触发父组件绑定的 funB 事件
+                this.$emit('click', '哈哈哈，我就是这么强大')
+              },
+            },
+          },
+          'my-country-one': {
+            props: ['country'],
+            template: `<div class="father">
           <h1>{{country}}</h1>
           <button @click="emitParent">去发布父组件早已经订阅好的事件</button>
         </div>
         `,
-        methods: {
-          emitParent() {
-            this.$emit('set-name','浙江嘉兴');
-          }
-        }
-      },
-      'my-country-two': {
-        props: ['country'],
-        template: 
-        `<div class="father">
+            methods: {
+              emitParent() {
+                this.$emit('set-name', '浙江嘉兴')
+              },
+            },
+          },
+          'my-country-two': {
+            props: ['country'],
+            template: `<div class="father">
           <h1>{{country}}</h1>
           <button @click="_emitParent">去发布父组件早已经订阅好的事件</button>
         </div>
         `,
-        methods: {
-          _emitParent() {
-            this.$emit('set-name','浙江嘉兴2');
-          }
-        }
-      },
-      'my-country-three': {
-        props: ['country'],
-        template: 
-        `<div class="father">
+            methods: {
+              _emitParent() {
+                this.$emit('set-name', '浙江嘉兴2')
+              },
+            },
+          },
+          'my-country-three': {
+            props: ['country'],
+            template: `<div class="father">
           <h1>{{country}}</h1>
           <button @click="TemitParent">去发布父组件早已经订阅好的事件</button>
         </div>
         `,
-        methods: {
-          // 这里注意我们的事件名称被换成了update:country
-          // update：是被固定的也就是vue为我们约定好的名称部分
-          // country 是我们要修改的状态的名称，是我们手动配置的，与传入的状态名字对应起来
+            methods: {
+              // 这里注意我们的事件名称被换成了update:country
+              // update：是被固定的也就是vue为我们约定好的名称部分
+              // country 是我们要修改的状态的名称，是我们手动配置的，与传入的状态名字对应起来
 
-          // 注意事项：
-          // 这里我们必须在事件执行名称前加上update：的前缀才能正确触发事件。
-          TemitParent() {
-            this.$emit('update:country','浙江嘉兴3');
-          }
-        }
-      },
-      'btn-father': {
-        // 简单说, 在实例中data是对象, 在组件中data就得是函数返回对象
-        data() {
-          return {
-            num: 0
-          }
-        },
-        template:
-         `<div class="father">
+              // 注意事项：
+              // 这里我们必须在事件执行名称前加上update：的前缀才能正确触发事件。
+              TemitParent() {
+                this.$emit('update:country', '浙江嘉兴3')
+              },
+            },
+          },
+          'btn-father': {
+            // 简单说, 在实例中data是对象, 在组件中data就得是函数返回对象
+            data() {
+              return {
+                num: 0,
+              }
+            },
+            template: `<div class="father">
             <h2>我是父组件 下面是我引入的子组件<br> 掌声响起来！！！</h2>
             <h1>{{num}}</h1>
             <p>下边引入的子组件</p>
             <btn-child v-on:on-add="addNum"></btn-child>
           </div>`,
-        methods: {
-          // 这个方法是父组件里的方法
-          addNum() {
-            this.num ++;
-          },
-          clickHandle() {
-            alert('信息')
-          }
-        },
-        // 形成父子嵌套关系的组件 引用组件的时候 可以在对应的父组件的components下再写一个components
-        components: {
-          'btn-child': {
-            template: '<button @click="addnum">子组件（+1）</button>',
             methods: {
-              // 当子组件需要传递数据给父组件的时候
-              // 子组件就点击按钮触发这个事件 就能够间接地调用父组件中的函数
-              // 如果带了参数的话 父组件就可以获取的子组件传递过来的数据了
-              addnum() {
-                this.$emit('on-add');
-              }
-            }
-          }
-        }
-      },
-      'check-box': {
-        data() {
-          return {}
+              // 这个方法是父组件里的方法
+              addNum() {
+                this.num++
+              },
+              clickHandle() {
+                alert('信息')
+              },
+            },
+            // 形成父子嵌套关系的组件 引用组件的时候 可以在对应的父组件的components下再写一个components
+            components: {
+              'btn-child': {
+                template: '<button @click="addnum">子组件（+1）</button>',
+                methods: {
+                  // 当子组件需要传递数据给父组件的时候
+                  // 子组件就点击按钮触发这个事件 就能够间接地调用父组件中的函数
+                  // 如果带了参数的话 父组件就可以获取的子组件传递过来的数据了
+                  addnum() {
+                    this.$emit('on-add')
+                  },
+                },
+              },
+            },
+          },
+          'check-box': {
+            data() {
+              return {}
+            },
+            model: {
+              prop: 'checked',
+              event: 'change',
+            },
+            props: {
+              checked: Boolean,
+            },
+            // 仅写上 prop 但不传值，会隐式转换为 `true`
+            // template: `<input type="checkbox" checked @change="changeCheck">`,
+            // 因为这是一个 JavaScript 表达式而不是一个字符串
+            template: `<input type="checkbox" :checked="checked" @change="changeCheck">`,
+            methods: {
+              changeCheck(e) {
+                console.log('%c⚡⚡⚡⚡⚡⚡', 'color:pink;font-size:28px;')
+                console.log(e)
+
+                this.$emit('change', e.target.checked)
+              },
+            },
+          },
         },
-        model: {
-          prop: 'checked',
-          event: 'change'
-        },
-        props: {
-          checked: Boolean
-        },
-        template: `<input type="checkbox" :checked="checked" @change="changeCheck">`,
-        methods: {
-          changeCheck(e) {
-            console.log('%c⚡⚡⚡⚡⚡⚡','color:pink;font-size:28px;');
-            console.log(e);
-            
-            this.$emit('change',e.target.checked);
-          }
-        }
 
-      }
-    }
-
-
-    // 参考链接： 1.https://blog.csdn.net/ThisOnly/article/details/90636722 2.https://blog.csdn.net/liushijun_/article/details/92426854
-
-  })
-  
-  
-  
-  </script>
-</body>
+        // 参考链接： 1.https://blog.csdn.net/ThisOnly/article/details/90636722 2.https://blog.csdn.net/liushijun_/article/details/92426854
+      })
+    </script>
+  </body>
 </html>
