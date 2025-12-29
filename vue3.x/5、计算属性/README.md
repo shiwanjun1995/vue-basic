@@ -29,3 +29,36 @@ const newTime = computed(() => {
 触发新的计算应该更新它所依赖的源状态，而不是直接修改计算属性的返回值。
 
 ```
+
+## 展示过滤或排序后的结果
+
+```js
+可以创建返回已过滤或已排序数组的计算属性，如下：
+const numbers = ref([1, 2, 3, 4, 5])
+
+const evenNumbers = computed(() => {
+  return numbers.value.filter((n) => n % 2 === 0)
+})
+
+当计算属性不可行的情况下（在多层潜逃的v-for循环中），可以使用以下方法：
+<ul v-for="numbers in sets">
+  <li v-for="n in even(numbers)">{{ n }}</li>
+</ul>
+
+const sets = ref([
+  [1, 2, 3, 4, 5],
+  [6, 7, 8, 9, 10]
+])
+
+function even(numbers) {
+  return numbers.filter((number) => number % 2 === 0)
+}
+
+在计算属性中使用这两类函数一定要小心：reverse()和sort()，因为这两个函数会改变原数组，计算函数中不应该这么做，而是在调用方法前创建一个副本：
+const evenNumbers = computed(() => {
+    return [...numbers.value].reverse()
+    // return [...numbers.value].sort((a, b) => a - b)
+});
+
+
+```
